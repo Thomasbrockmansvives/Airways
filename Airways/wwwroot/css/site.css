@@ -1,22 +1,121 @@
+/* Your existing CSS */
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+}
+
+:root {
+    --msa-blue: #0051a1;
+    --msa-dark-blue: #003366;
+    --msa-light: #f8f9fa;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+}
+
+header {
+    background-color: var(--msa-dark-blue);
+}
+
+.navbar {
+    background-color: var(--msa-dark-blue) !important;
+    padding: 0.5rem 1rem;
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    color: white !important;
+    font-weight: 700;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+    .navbar-brand img {
+        max-width: 100px;
+        max-height: 100px;
+        margin-right: 40px;
+    }
+
+.brand-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.brand-title {
+    font-weight: 700;
+    font-size: 2.5rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    line-height: 1.4;
+}
+
+.brand-subtitle {
+    font-size: 1.8rem;
+    font-style: italic;
+    opacity: 0.8;
+}
+
+.navbar-nav .nav-link {
+    color: white !important;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    transition: all 0.2s ease;
+}
+
+    .navbar-nav .nav-link:hover {
+        color: #8fc9ff !important;
+    }
+
+.navbar-toggler {
+    border-color: rgba(255,255,255,0.5);
+}
+
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.75%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+.footer {
+    background-color: var(--msa-dark-blue);
+    color: white;
+}
+
+    .footer a {
+        color: #8fc9ff;
+    }
+
+.text-muted {
+    color: white !important;
+}
+
+
+.navbar-collapse.justify-content-end .navbar-nav {
+    margin-right: 15px;
+}
+
+
+@media (max-width: 768px) {
+    .navbar-collapse .navbar-nav {
+        margin-right: 0;
+    }
 }
