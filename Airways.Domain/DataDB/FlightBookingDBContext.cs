@@ -38,6 +38,8 @@ public partial class FlightBookingDBContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.UseCollation("Latin1_General_CI_AS");
+
         modelBuilder.Entity<Booking>(entity =>
         {
             entity.Property(e => e.BookingId)

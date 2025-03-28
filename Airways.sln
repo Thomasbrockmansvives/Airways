@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.11.35327.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Airways", "Airways\Airways.csproj", "{7D36E924-0463-4995-A509-71C7F996F958}"
+	ProjectSection(ProjectDependencies) = postProject
+		{104293C7-435F-460C-B08E-F410A6742168} = {104293C7-435F-460C-B08E-F410A6742168}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Airways.Domain", "Airways.Domain\Airways.Domain.csproj", "{51DB1BE1-C416-4359-B838-66596656BE25}"
 EndProject
