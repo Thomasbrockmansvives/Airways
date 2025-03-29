@@ -83,6 +83,15 @@ header {
     transition: all 0.2s ease;
 }
 
+.nav-spacer {
+    width: 100px !important;
+    min-width: 100px !important;
+    display: block !important;
+    flex-shrink: 0 !important;
+    flex-grow: 0 !important;
+    visibility: visible !important;
+}
+
     .navbar-nav .nav-link:hover {
         color: #8fc9ff !important;
     }
