@@ -3,16 +3,18 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35327.3
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Airways", "Airways\Airways.csproj", "{7D36E924-0463-4995-A509-71C7F996F958}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Airways", "Airways\Airways.csproj", "{7D36E924-0463-4995-A509-71C7F996F958}"
 	ProjectSection(ProjectDependencies) = postProject
 		{104293C7-435F-460C-B08E-F410A6742168} = {104293C7-435F-460C-B08E-F410A6742168}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Airways.Domain", "Airways.Domain\Airways.Domain.csproj", "{51DB1BE1-C416-4359-B838-66596656BE25}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Airways.Domain", "Airways.Domain\Airways.Domain.csproj", "{51DB1BE1-C416-4359-B838-66596656BE25}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Airways.Services", "Airways.Services\Airways.Services.csproj", "{C5ECE5D9-2E79-4592-8BC5-D243255B0701}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Airways.Services", "Airways.Services\Airways.Services.csproj", "{C5ECE5D9-2E79-4592-8BC5-D243255B0701}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Airways.Repository", "Airways.Repository\Airways.Repository.csproj", "{104293C7-435F-460C-B08E-F410A6742168}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Airways.Repository", "Airways.Repository\Airways.Repository.csproj", "{104293C7-435F-460C-B08E-F410A6742168}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Airways.Util", "Airways.Util\Airways.Util.csproj", "{4A47842B-B40E-418F-A43F-C24D4EE5E459}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,6 +38,10 @@ Global
 		{104293C7-435F-460C-B08E-F410A6742168}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{104293C7-435F-460C-B08E-F410A6742168}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{104293C7-435F-460C-B08E-F410A6742168}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A47842B-B40E-418F-A43F-C24D4EE5E459}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A47842B-B40E-418F-A43F-C24D4EE5E459}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A47842B-B40E-418F-A43F-C24D4EE5E459}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A47842B-B40E-418F-A43F-C24D4EE5E459}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

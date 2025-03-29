@@ -4,8 +4,12 @@ using Airways.Repository.Interfaces;
 using Airways.Repository;
 using Airways.Services.Interfaces;
 using Airways.Services;
+using Airways.Util.Mail.Interfaces;
+using Airways.Util.Mail;
+using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +19,16 @@ builder.Services.AddControllersWithViews();
 // Add Dependency Injections
 builder.Services.AddScoped<ICustomerProfileDAO, CustomerProfileDAO>();
 builder.Services.AddScoped<ICustomerProfileService, CustomerProfileService>();
+
+// Add EmailSettings
+var emailSettings = new Airways.Util.Mail.EmailSettings();
+builder.Configuration.GetSection("EmailSettings").Bind(emailSettings);
+
+builder.Services.AddSingleton(emailSettings);
+
+builder.Services.AddSingleton<Airways.Util.Mail.Interfaces.IEmailSend, Airways.Util.Mail.EmailSend>();
+
+
 
 //DbContext
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")

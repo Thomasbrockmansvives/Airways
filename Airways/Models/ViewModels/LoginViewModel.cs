@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Airways.WebUI.Models
+namespace Airways.Models.ViewModels
 {
     public class LoginViewModel
     {
