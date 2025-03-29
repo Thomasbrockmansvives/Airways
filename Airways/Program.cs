@@ -2,11 +2,19 @@ using Airways.Domain.DataDB;
 using Airways.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Airways.Repository.Interfaces;
+using Airways.Repository;
+using Airways.Services.Interfaces;
+using Airways.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// Add Dependency Injections
+builder.Services.AddScoped<ICustomerProfileDAO, CustomerProfileDAO>();
+builder.Services.AddScoped<ICustomerProfileService, CustomerProfileService>();
 
 //DbContext
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");

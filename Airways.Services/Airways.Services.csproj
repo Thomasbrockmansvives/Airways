@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.10" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Airways.Domain\Airways.Domain.csproj" />
     <ProjectReference Include="..\Airways.Repository\Airways.Repository.csproj" />
   </ItemGroup>
