@@ -1,8 +1,98 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container">
+    
+    <div class="row my-5">
+        <div class="col-md-6">
+            <h1 class="display-4">Fly with Michael Scott</h1>
+            <p class="lead">
+                Welcome to our premier flight booking service, offering daily connections between the world's most exciting cities.
+                With flexible booking options, personalized meal choices, and seamless travel planning, we make your journey comfortable
+                from booking to arrival.
+                Whether it's for a short or long stay, your experience will be unforgettable (that's what she said?).
+            </p>
+            <p>
+                Our service allows you to book flights up to 6 months in advance, with the options Economy and
+                Business class seating and of course a wide range a meals to choice from. Whether you're flying direct or need connecting flights, we've got you covered with
+                daily departures between all our destinations.
+            </p>
+        </div>
+        <div class="col-md-6">
+            <img src="~/img/airplane.jpg" alt="Airplane" class="img-fluid rounded shadow-lg" />
+        </div>
+    </div>
+
+  
+    <h2 class="text-center mb-4">Explore Our World Cities</h2>
+    <div class="row mb-5">
+        <div class="col-md-3 mb-4">
+            <div class="card h-100">
+                <img src="~/img/newyork.jpg" class="card-img-top" alt="New York">
+                <div class="card-body">
+                    <h5 class="card-title">New York</h5>
+                    <p class="card-text">The city that never sleeps.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="card h-100">
+                <img src="~/img/london.png" class="card-img-top" alt="London">
+                <div class="card-body">
+                    <h5 class="card-title">London</h5>
+                    <p class="card-text">The perfect blend of historic charm and modern sophistication.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="card h-100">
+                <img src="~/img/tokyo.jpg" class="card-img-top" alt="Tokyo">
+                <div class="card-body">
+                    <h5 class="card-title">Tokyo</h5>
+                    <p class="card-text">The fascinating contrast of ancient tradition and cutting-edge technology.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="card h-100">
+                <img src="~/img/singapore.png" class="card-img-top" alt="Singapore">
+                <div class="card-body">
+                    <h5 class="card-title">Singapore</h5>
+                    <p class="card-text">The garden city where futuristic architecture meets lush green spaces.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="row mt-5 bg-light p-4 rounded">
+        <div class="col-md-8">
+            <h2>About Our Company</h2>
+            <p>
+                Founded by the visionary Michael Scott Airlines, our company believes that flying should be as fun as a day at the office - but without the meetings.
+            </p>
+          
+            <p>
+                Our staff is trained under the philosophy that "I'm not superstitious, but I am a little stitious" - which means we take extra precautions to ensure your safety while maintaining a sense of humor.
+            </p>
+
+        </div>
+        <div class="col-md-4">
+            <img src="~/img/team.jpg" alt="Team" class="img-fluid rounded shadow" />
+        </div>
+    </div>
+
+    
+    <div class="row mt-4 mb-5">
+        <div class="col-12 text-center">
+            <div class="alert alert-info" role="alert">
+                <p>
+                    Don't forget to check your history of bookings on <a href="/Home/History" class="alert-link">My Bookings</a>,
+                    start a search on <a href="/Home/Search" class="alert-link">Search your flight</a>,
+                    and check your <a href="/ShoppingCart" class="alert-link">Shopping Cart</a> to confirm your bookings!
+                </p>
+            </div>
+        </div>
+    </div>
 </div>
