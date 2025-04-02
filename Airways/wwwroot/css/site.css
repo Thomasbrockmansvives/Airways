@@ -128,3 +128,34 @@ header {
         margin-right: 0;
     }
 }
+
+.small-header {
+    font-size: 2rem;
+}
+
+.small-title {
+    font-size: 0.9rem; 
+}
+
+.small-text {
+    font-size: 0.7rem; 
+}
+
+.small-label {
+    font-size: 0.7rem; 
+}
+
+.small-select, .small-input {
+    font-size: 0.7rem; 
+}
+
+.btn-custom-dark-blue {
+    background-color: #00274d; /* Dark blue color */
+    color: white; /* Text color */
+    border-color: #00274d; /* Border color */
+}
+
+    .btn-custom-dark-blue:hover {
+        background-color: #001f3f; /* Darker shade for hover effect */
+        border-color: #001f3f; /* Border color on hover */
+    }

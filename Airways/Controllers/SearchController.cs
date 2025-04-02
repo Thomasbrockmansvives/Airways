@@ -1,32 +1,22 @@
-﻿using Airways.Models;
+﻿using Airways.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace Airways.Controllers
 {
     public class SearchController : Controller
     {
-        private readonly ILogger<SearchController> _logger;
+        private readonly ICityService _cityService;
 
-        public SearchController(ILogger<SearchController> logger)
+        public SearchController(ICityService cityService)
         {
-            _logger = logger;
+            _cityService = cityService;
         }
 
-        public IActionResult Search()
+        public async Task<IActionResult> Search()
         {
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            var cities = await _cityService.GetAllCitiesAsync();
+            return View(cities);
         }
     }
 }
