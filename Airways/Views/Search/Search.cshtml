@@ -7,6 +7,15 @@
         <div class="col-12">
             <h3 class="small-header">Search a flight</h3>
             <hr />
+
+            <div class="alert alert-info d-flex align-items-center" role="alert">
+                <i class="bi bi-info-circle me-3 fs-4"></i>
+                <div>
+                    Find your perfect flight between global destinations. Select cities and a search period, and we'll show you direct and connecting flights.
+                    After selecting, you'll choose your class and meal before adding the flights to your cart, where your bookings can be confirmed.
+                </div>
+            </div>
+
             <div id="search-form-container">
                 @await Html.PartialAsync("_FlightSearch", Model)
             </div>
