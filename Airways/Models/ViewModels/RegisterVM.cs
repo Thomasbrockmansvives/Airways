@@ -1,24 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿// RegisterViewModel.cs
+using System.ComponentModel.DataAnnotations;
 
 namespace Airways.Models.ViewModels
 {
-    public class LoginViewModel
-    {
-        [Required(ErrorMessage = "Email is required")]
-        [EmailAddress(ErrorMessage = "Invalid email address")]
-        [Display(Name = "Email")]
-        public string Email { get; set; }
-
-        [Required(ErrorMessage = "Password is required")]
-        [DataType(DataType.Password)]
-        [Display(Name = "Password")]
-        public string Password { get; set; }
-
-        [Display(Name = "Remember me")]
-        public bool RememberMe { get; set; }
-    }
-
-    public class RegisterViewModel
+    public class RegisterVM
     {
         [Required(ErrorMessage = "First Name is required")]
         [StringLength(50, MinimumLength = 2, ErrorMessage = "First Name must be between 2 and 50 characters")]

@@ -1,68 +1,38 @@
-﻿<div class="card shadow-sm mb-4">
-    <div class="card-header bg-secondary text-white">
-        <h3 class="card-title mb-0 small-title">Search</h3>
-    </div>
-    <div class="card-body">
-        <p class="card-text mb-4 small-text">
-            Select your departure, arrival , and the date range when you want to travel. 
-        </p>
+﻿@model Airways.ViewModels.FlightSearchVM
 
-        <form id="flightSearchForm" method="post" asp-controller="Search" asp-action="SearchResults">
-            <div class="row mb-3">
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label for="departureCity" class="form-label small-label">Departure City</label>
-                        <select id="departureCity" name="DepartureCity" class="form-select small-select" required>
-                            <option value="">-- Select Departure City --</option>
-                            @foreach (var city in Model)
-                            {
-                                <option value="@city.CityId">@city.Name, @city.Country</option>
-                            }
-                        </select>
-                        <div class="invalid-feedback">Please select a departure city.</div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label for="arrivalCity" class="form-label small-label">Arrival City</label>
-                        <select id="arrivalCity" name="ArrivalCity" class="form-select small-select" required>
-                            <option value="">-- Select Arrival City --</option>
-                            @foreach (var city in Model)
-                            {
-                                <option value="@city.CityId">@city.Name, @city.Country</option>
-                            }
-                        </select>
-                        <div class="invalid-feedback">Please select an arrival city.</div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label for="startDate" class="form-label small-label">Start Date</label>
-                        <input type="date" id="startDate" name="StartDate" class="form-control small-input"
-                               min="@DateTime.Now.AddDays(3).ToString("yyyy-MM-dd")"
-                               max="@DateTime.Now.AddMonths(6).ToString("yyyy-MM-dd")"
-                               required />
-                        <div class="invalid-feedback">Please select a valid start date.</div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label for="endDate" class="form-label small-label">End Date</label>
-                        <input type="date" id="endDate" name="EndDate" class="form-control small-input"
-                               min="@DateTime.Now.AddDays(3).ToString("yyyy-MM-dd")"
-                               max="@DateTime.Now.AddMonths(6).ToString("yyyy-MM-dd")"
-                               required />
-                        <div class="invalid-feedback">Please select a valid end date.</div>
-                    </div>
+<div class="container-fluid">
+    <form id="flightSearchForm" asp-action="Search" method="post">
+        <div class="row g-3">
+            <div class="col-md-3">
+                <label for="DepartureCityId" class="form-label">Departure City</label>
+                <select asp-for="DepartureCityId" id="departureCitySelect" class="form-control" asp-items="@(new SelectList(Model.AvailableCities, "CityId", "Name"))">
+                    <option value="">Select Departure City</option>
+                </select>
+                <span asp-validation-for="DepartureCityId" class="text-danger" id="departureCitySelect-error"></span>
+            </div>
+            <div class="col-md-3">
+                <label for="ArrivalCityId" class="form-label">Destination City</label>
+                <select asp-for="ArrivalCityId" id="arrivalCitySelect" class="form-control" asp-items="@(new SelectList(Model.AvailableCities, "CityId", "Name"))">
+                    <option value="">Select Destination City</option>
+                </select>
+                <span asp-validation-for="ArrivalCityId" class="text-danger" id="arrivalCitySelect-error"></span>
+            </div>
+            <div class="col-md-2">
+                <label for="StartDate" class="form-label">Start</label>
+                <input asp-for="StartDate" id="StartDate" type="date" class="form-control" />
+                <span asp-validation-for="StartDate" class="text-danger" id="StartDate-error"></span>
+            </div>
+            <div class="col-md-2">
+                <label for="EndDate" class="form-label">End</label>
+                <input asp-for="EndDate" id="EndDate" type="date" class="form-control" />
+                <span asp-validation-for="EndDate" class="text-danger" id="EndDate-error"></span>
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+                <div>
+                    <button type="submit" class="btn btn-primary me-2">Search</button>
+                    <button type="reset" class="btn btn-secondary">Reset</button>
                 </div>
             </div>
-
-            <div class="row">
-                <div class="col-12 d-flex justify-content-end">
-                    <button type="reset" class="btn btn-secondary btn-sm me-2">Reset</button>
-                    <button type="submit" class="btn btn-custom-dark-blue btn-sm">Search Flights</button>
-                </div>
-            </div>
-        </form>
-    </div>
+        </div>
+    </form>
 </div>

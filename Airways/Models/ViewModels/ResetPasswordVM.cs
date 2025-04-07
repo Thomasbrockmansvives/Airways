@@ -2,7 +2,7 @@
 
 namespace Airways.Models.ViewModels
 {
-    public class ResetPasswordViewModel
+    public class ResetPasswordVM
     {
         [Required]
         [EmailAddress]

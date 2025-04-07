@@ -14,7 +14,11 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews()
+    .AddViewOptions(options =>
+    {
+        options.HtmlHelperOptions.ClientValidationEnabled = true;
+    });
 
 // Add Dependency Injections
 builder.Services.AddScoped<Airways.Repository.Interfaces.ICustomerProfileDAO, Airways.Repository.CustomerProfileDAO>();
