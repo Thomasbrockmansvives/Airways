@@ -1,11 +1,13 @@
 ﻿using Airways.Domain.EntitiesDB;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Airways.ViewModels
 {
-    public class FlightSearchVM
+    public class FlightSearchVM : IValidatableObject
     {
         [Required(ErrorMessage = "Please select a departure city")]
         public int DepartureCityId { get; set; }
@@ -23,33 +25,38 @@ namespace Airways.ViewModels
         [Display(Name = "End Date")]
         public DateTime EndDate { get; set; }
 
+        [ValidateNever]
         public IEnumerable<City> AvailableCities { get; set; }
 
-        
-        public bool Validate()
+        // complex validation rules
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            // Check if cities are the same
+            
             if (DepartureCityId > 0 && DepartureCityId == ArrivalCityId)
             {
-                return false;
+                yield return new ValidationResult(
+                    "Departure and destination cities cannot be the same",
+                    new[] { nameof(DepartureCityId), nameof(ArrivalCityId) });
             }
 
-            // Check date range
+            
             if (StartDate > EndDate)
             {
-                return false;
+                yield return new ValidationResult(
+                    "Start date must be before or equal to end date of your search period",
+                    new[] { nameof(StartDate), nameof(EndDate) });
             }
 
-            // Check date range constraints (3 days to 6 months in advance)
-            var minDate = DateTime.Now.AddDays(3);
+            
+            var minDate = DateTime.Now.AddDays(2);
             var maxDate = DateTime.Now.AddMonths(6);
 
             if (StartDate < minDate || EndDate > maxDate)
             {
-                return false;
+                yield return new ValidationResult(
+                    "Flights must be booked 3 days to 6 months in advance",
+                    new[] { nameof(StartDate), nameof(EndDate) });
             }
-
-            return true;
         }
     }
 }
