@@ -155,7 +155,11 @@ header {
     border-color: #00274d; /* Border color */
 }
 
-    .btn-custom-dark-blue:hover {
+.btn-custom-dark-blue:hover {
         background-color: #001f3f; /* Darker shade for hover effect */
         border-color: #001f3f; /* Border color on hover */
-    }
+}
+
+.searchResults {
+    margin-top: 20px;
+}

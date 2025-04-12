@@ -25,6 +25,12 @@ builder.Services.AddScoped<Airways.Repository.Interfaces.ICustomerProfileDAO, Ai
 builder.Services.AddScoped<Airways.Services.Interfaces.ICustomerProfileService, Airways.Services.CustomerProfileService>();
 builder.Services.AddScoped<Airways.Repository.Interfaces.ICityDAO, Airways.Repository.CityDAO>();
 builder.Services.AddScoped<Airways.Services.Interfaces.ICityService, Airways.Services.CityService>();
+builder.Services.AddScoped<ICityDAO, CityDAO>();
+builder.Services.AddScoped<ICityService, CityService>();
+builder.Services.AddScoped<IConnectionDAO, ConnectionDAO>();
+builder.Services.AddScoped<IConnectionService, ConnectionService>();
+builder.Services.AddScoped<IFlightDAO, FlightDAO>();
+builder.Services.AddScoped<IFlightService, FlightService>();
 
 // Add EmailSettings
 var emailSettings = new Airways.Util.Mail.EmailSettings();
