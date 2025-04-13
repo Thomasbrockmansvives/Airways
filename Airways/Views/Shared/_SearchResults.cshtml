@@ -18,16 +18,14 @@
 
     @if (Model.Lines >= 1 && Model.FlightNumber1.HasValue)
     {
-        <div class="card mb-4">
-            <div class="card-header">
-                <h5>Flight from @Model.Line1DepartureCity to @Model.Line1ArrivalCity</h5>
-            </div>
-            <div class="card-body">
+        
                 <div class="table-responsive">
                     <table class="table table-hover">
                         <thead>
                             <tr>
                                 <th>Date</th>
+                                <th>From</th>
+                                <th>To</th>
                                 <th>Departure</th>
                                 <th>Arrival</th>
                                 <th>Economy</th>
@@ -36,19 +34,18 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @if (Model.Line1Flights != null && Model.Line1Flights.Any())
-                            {
-                                @foreach (var flight in Model.Line1Flights)
-                                {
+                            
                                     <tr>
-                                        <td>@flight.Date.ToString("yyyy-MM-dd")</td>
-                                        <td>@flight.FlightNumberNavigation.DepartureTime.ToString("HH:mm")</td>
-                                        <td>@flight.FlightNumberNavigation.ArrivalTime.ToString("HH:mm")</td>
-                                        <td>@flight.PriceEconomy.ToString("C")</td>
-                                        <td>@flight.PriceBusiness.ToString("C")</td>
+                                        <td>@Model.Line1Flight.Date.ToString("yyyy-MM-dd")</td>
+                                        <td>@Model.Line1DepartureCity</td>
+                                        <td>@Model.Line1ArrivalCity</td>
+                                        <td>@Model.Line1Flight.FlightNumberNavigation.DepartureTime.ToString("HH:mm")</td>
+                                        <td>@Model.Line1Flight.FlightNumberNavigation.ArrivalTime.ToString("HH:mm")</td>
+                                        <td>@Model.Line1Flight.PriceEconomy.ToString("C")</td>
+                                        <td>@Model.Line1Flight.PriceBusiness.ToString("C")</td>
                                         <td>
-                                            <a asp-controller="Booking" asp-action="SelectFlight"
-                                               asp-route-flightId="@flight.FlightId"
+                                            <a asp-controller="Search" asp-action="SelectFlight"
+                                               asp-route-flightId="@Model.Line1Flight.FlightId"
                                                asp-route-line="1"
                                                class="btn btn-sm btn-outline-primary">
                                                 <i class="bi bi-chevron-right"></i>
@@ -56,32 +53,23 @@
                                         </td>
                                     </tr>
                                 }
-                            }
-                            else
-                            {
-                                <tr>
-                                    <td colspan="6" class="text-center">No flights available for the selected dates.</td>
-                                </tr>
-                            }
+                            
                         </tbody>
                     </table>
                 </div>
-            </div>
-        </div>
+            
     }
 
     @if (Model.Lines >= 2 && Model.FlightNumber2.HasValue)
     {
-        <div class="card mb-4">
-            <div class="card-header">
-                <h5>Second Flight from @Model.Line2DepartureCity to @Model.Line2ArrivalCity</h5>
-            </div>
-            <div class="card-body">
+        
                 <div class="table-responsive">
                     <table class="table table-hover">
                         <thead>
                             <tr>
                                 <th>Date</th>
+                                <th>From</th>
+                                <th>To</th>
                                 <th>Departure</th>
                                 <th>Arrival</th>
                                 <th>Economy</th>
@@ -90,52 +78,41 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @if (Model.Line2Flights != null && Model.Line2Flights.Any())
-                            {
-                                @foreach (var flight in Model.Line2Flights)
-                                {
+                            
                                     <tr>
-                                        <td>@flight.Date.ToString("yyyy-MM-dd")</td>
-                                        <td>@flight.FlightNumberNavigation.DepartureTime.ToString("HH:mm")</td>
-                                        <td>@flight.FlightNumberNavigation.ArrivalTime.ToString("HH:mm")</td>
-                                        <td>@flight.PriceEconomy.ToString("C")</td>
-                                        <td>@flight.PriceBusiness.ToString("C")</td>
+                                        <td>@Model.Line2Flight.Date.ToString("yyyy-MM-dd")</td>
+                                        <td>@Model.DepartureCity</td>
+                                        <td>@Model.ArrivalCity</td>
+                                        <td>@Model.Line2Flight.FlightNumberNavigation.DepartureTime.ToString("HH:mm")</td>
+                                        <td>@Model.Line2Flight.FlightNumberNavigation.ArrivalTime.ToString("HH:mm")</td>
+                                        <td>@Model.Line2Flight.PriceEconomy.ToString("C")</td>
+                                        <td>@Model.Line2Flight.PriceBusiness.ToString("C")</td>
                                         <td>
-                                            <a asp-controller="Booking" asp-action="SelectFlight"
-                                               asp-route-flightId="@flight.FlightId"
+                                            <a asp-controller="Search" asp-action="SelectFlight"
+                                               asp-route-flightId="@Model.Line2Flight.FlightId"
                                                asp-route-line="2"
                                                class="btn btn-sm btn-outline-primary">
                                                 <i class="bi bi-chevron-right"></i>
                                             </a>
                                         </td>
                                     </tr>
-                                }
-                            }
-                            else
-                            {
-                                <tr>
-                                    <td colspan="6" class="text-center">No flights available for the selected dates.</td>
-                                </tr>
-                            }
+                                
                         </tbody>
                     </table>
                 </div>
-            </div>
-        </div>
+            
     }
 
     @if (Model.Lines >= 3 && Model.FlightNumber3.HasValue)
     {
-        <div class="card mb-4">
-            <div class="card-header">
-                <h5>Third Flight from @Model.Line3DepartureCity to @Model.Line3ArrivalCity</h5>
-            </div>
-            <div class="card-body">
+        
                 <div class="table-responsive">
                     <table class="table table-hover">
                         <thead>
                             <tr>
                                 <th>Date</th>
+                                <th>From</th>
+                                <th>To</th>
                                 <th>Departure</th>
                                 <th>Arrival</th>
                                 <th>Economy</th>
@@ -144,37 +121,28 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @if (Model.Line3Flights != null && Model.Line3Flights.Any())
-                            {
-                                @foreach (var flight in Model.Line3Flights)
-                                {
+                            
                                     <tr>
-                                        <td>@flight.Date.ToString("yyyy-MM-dd")</td>
-                                        <td>@flight.FlightNumberNavigation.DepartureTime.ToString("HH:mm")</td>
-                                        <td>@flight.FlightNumberNavigation.ArrivalTime.ToString("HH:mm")</td>
-                                        <td>@flight.PriceEconomy.ToString("C")</td>
-                                        <td>@flight.PriceBusiness.ToString("C")</td>
+                                        <td>@Model.Line3Flight.Date.ToString("yyyy-MM-dd")</td>
+                                        <td>@Model.DepartureCity</td>
+                                        <td>@Model.ArrivalCity</td>
+                                        <td>@Model.Line3Flight.FlightNumberNavigation.DepartureTime.ToString("HH:mm")</td>
+                                        <td>@Model.Line3Flight.FlightNumberNavigation.ArrivalTime.ToString("HH:mm")</td>
+                                        <td>@Model.Line3Flight.PriceEconomy.ToString("C")</td>
+                                        <td>@Model.Line3Flight.PriceBusiness.ToString("C")</td>
                                         <td>
-                                            <a asp-controller="Booking" asp-action="SelectFlight"
-                                               asp-route-flightId="@flight.FlightId"
+                                            <a asp-controller="Search" asp-action="SelectFlight"
+                                               asp-route-flightId="@Model.Line3Flight.FlightId"
                                                asp-route-line="3"
                                                class="btn btn-sm btn-outline-primary">
                                                 <i class="bi bi-chevron-right"></i>
                                             </a>
                                         </td>
                                     </tr>
-                                }
-                            }
-                            else
-                            {
-                                <tr>
-                                    <td colspan="6" class="text-center">No flights available for the selected dates.</td>
-                                </tr>
-                            }
+                                
                         </tbody>
                     </table>
                 </div>
-            </div>
-        </div>
+          
     }
 </div>

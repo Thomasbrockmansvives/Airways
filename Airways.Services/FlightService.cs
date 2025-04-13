@@ -16,9 +16,9 @@ namespace Airways.Services
             _flightDAO = flightDAO;
         }
 
-        public async Task<IEnumerable<Flight>> GetFlightsByFlightNumberAndDateRangeAsync(int flightNumber, DateOnly startDate, DateOnly endDate)
+        public async Task<Flight> GetFlightByFlightNumberAndDateAsync(int flightNumber, DateOnly travelDate)
         {
-            return await _flightDAO.GetFlightsByFlightNumberAndDateRangeAsync(flightNumber, startDate, endDate);
+            return await _flightDAO.GetFlightByFlightNumberAndDateAsync(flightNumber, travelDate);
         }
 
         public async Task<Flight> GetFlightByIdAsync(int flightId)

@@ -20,12 +20,9 @@ namespace Airways.ViewModels
         [Required(ErrorMessage = "Please select a start date")]
         [Display(Name = "Start Date")]
         [DataType(DataType.Date)]
-        public DateTime StartDate { get; set; }
+        public DateTime TravelDate { get; set; }
 
-        [Required(ErrorMessage = "Please select an end date")]
-        [Display(Name = "End Date")]
-        [DataType(DataType.Date)]
-        public DateTime EndDate { get; set; }
+        
 
         [ValidateNever]
         public IEnumerable<City> AvailableCities { get; set; }

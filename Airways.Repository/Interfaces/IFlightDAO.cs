@@ -7,7 +7,7 @@ namespace Airways.Repository.Interfaces
 {
     public interface IFlightDAO
     {
-        Task<IEnumerable<Flight>> GetFlightsByFlightNumberAndDateRangeAsync(int flightNumber, DateOnly startDate, DateOnly endDate);
+        Task<Flight> GetFlightByFlightNumberAndDateAsync(int flightNumber, DateOnly travelDate);
         Task<Flight> GetFlightByIdAsync(int flightId);
     }
 }

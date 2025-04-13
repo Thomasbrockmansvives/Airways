@@ -18,7 +18,7 @@ namespace Airways.Repository
             _context = context;
         }
 
-        public async Task<IEnumerable<Flight>> GetFlightsByFlightNumberAndDateRangeAsync(int flightNumber, DateOnly startDate, DateOnly endDate)
+        public async Task<Flight> GetFlightByFlightNumberAndDateAsync(int flightNumber, DateOnly travelDate)
         {
             return await _context.Flights
                 .Include(f => f.FlightNumberNavigation)
@@ -26,10 +26,9 @@ namespace Airways.Repository
                 .Include(f => f.FlightNumberNavigation)
                     .ThenInclude(l => l.Arrival)
                 .Where(f => f.FlightNumber == flightNumber &&
-                       f.Date >= startDate &&
-                       f.Date <= endDate)
+                       f.Date == travelDate)
                 .OrderBy(f => f.Date)
-                .ToListAsync();
+                .FirstOrDefaultAsync();
         }
 
         public async Task<Flight> GetFlightByIdAsync(int flightId)

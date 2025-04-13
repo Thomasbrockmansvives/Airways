@@ -24,8 +24,8 @@ public class SearchController : Controller
     {
         var viewModel = new FlightSearchVM
         {
-            StartDate = DateTime.Now.AddDays(3),
-            EndDate = DateTime.Now.AddMonths(1),
+            TravelDate = DateTime.Now.AddDays(3),
+            
             AvailableCities = await _cityService.GetAllCitiesAsync()
         };
         return View(viewModel);
@@ -52,8 +52,8 @@ public class SearchController : Controller
         }
 
         // Convert DateTime to DateOnly
-        var startDate = DateOnly.FromDateTime(viewmodel.StartDate);
-        var endDate = DateOnly.FromDateTime(viewmodel.EndDate);
+        var travelDate = DateOnly.FromDateTime(viewmodel.TravelDate);
+        
 
         // Create the result view model
         var resultViewModel = new FlightSearchResultsVM
@@ -61,16 +61,16 @@ public class SearchController : Controller
             Lines = connection.Lines,
             DepartureCity = connection.Departure.Name,
             ArrivalCity = connection.Arrival.Name,
-            StartDate = startDate,
-            EndDate = endDate
+            TravelDate = travelDate
+            
         };
 
         // Fetch flights for line 1
         resultViewModel.FlightNumber1 = connection.FlightNumber1;
         resultViewModel.Line1DepartureCity = connection.FlightNumber1Navigation.Departure.Name;
         resultViewModel.Line1ArrivalCity = connection.FlightNumber1Navigation.Arrival.Name;
-        resultViewModel.Line1Flights = (await _flightService.GetFlightsByFlightNumberAndDateRangeAsync(
-            connection.FlightNumber1, startDate, endDate)).ToList();
+        resultViewModel.Line1Flight = (await _flightService.GetFlightByFlightNumberAndDateAsync(
+            connection.FlightNumber1, travelDate));
 
         // If there's a second line, fetch flights for it
         if (connection.Lines >= 2 && connection.FlightNumber2.HasValue)
@@ -78,8 +78,8 @@ public class SearchController : Controller
             resultViewModel.FlightNumber2 = connection.FlightNumber2;
             resultViewModel.Line2DepartureCity = connection.FlightNumber2Navigation.Departure.Name;
             resultViewModel.Line2ArrivalCity = connection.FlightNumber2Navigation.Arrival.Name;
-            resultViewModel.Line2Flights = (await _flightService.GetFlightsByFlightNumberAndDateRangeAsync(
-                connection.FlightNumber2.Value, startDate, endDate)).ToList();
+            resultViewModel.Line2Flight = (await _flightService.GetFlightByFlightNumberAndDateAsync(
+                connection.FlightNumber2.Value, travelDate));
         }
 
         // If there's a third line, fetch flights for it
@@ -88,8 +88,8 @@ public class SearchController : Controller
             resultViewModel.FlightNumber3 = connection.FlightNumber3;
             resultViewModel.Line3DepartureCity = connection.FlightNumber3Navigation.Departure.Name;
             resultViewModel.Line3ArrivalCity = connection.FlightNumber3Navigation.Arrival.Name;
-            resultViewModel.Line3Flights = (await _flightService.GetFlightsByFlightNumberAndDateRangeAsync(
-                connection.FlightNumber3.Value, startDate, endDate)).ToList();
+            resultViewModel.Line3Flight = (await _flightService.GetFlightByFlightNumberAndDateAsync(
+                connection.FlightNumber3.Value, travelDate));
         }
 
         // Set search form data back to view model
@@ -102,15 +102,15 @@ public class SearchController : Controller
     {
         var viewModel = new FlightSearchVM
         {
-            StartDate = DateTime.Now.AddDays(3),
-            EndDate = DateTime.Now.AddMonths(1),
+            TravelDate = DateTime.Now.AddDays(3),
+            
             AvailableCities = await _cityService.GetAllCitiesAsync()
         };
 
         return View("Search", viewModel);
     }
 
-    public async Task<IActionResult> GetSearchResults(int departureCityId, int arrivalCityId, DateTime startDate, DateTime endDate)
+    public async Task<IActionResult> GetSearchResults(int departureCityId, int arrivalCityId, DateTime travelDate)
     {
         
         var connection = await _connectionService.GetConnectionByCitiesAsync(departureCityId, arrivalCityId);
@@ -120,8 +120,8 @@ public class SearchController : Controller
             return PartialView("_NoResultsPartial");
         }
 
-        var startDateOnly = DateOnly.FromDateTime(startDate);
-        var endDateOnly = DateOnly.FromDateTime(endDate);
+        var travelDateOnly = DateOnly.FromDateTime(travelDate);
+        
 
         
         var resultViewModel = new FlightSearchResultsVM
@@ -129,16 +129,16 @@ public class SearchController : Controller
             Lines = connection.Lines,
             DepartureCity = connection.Departure.Name,
             ArrivalCity = connection.Arrival.Name,
-            StartDate = startDateOnly,
-            EndDate = endDateOnly
+            TravelDate = travelDateOnly,
+            
         };
 
         // Get flights for line 1
         resultViewModel.FlightNumber1 = connection.FlightNumber1;
         resultViewModel.Line1DepartureCity = connection.FlightNumber1Navigation.Departure.Name;
         resultViewModel.Line1ArrivalCity = connection.FlightNumber1Navigation.Arrival.Name;
-        resultViewModel.Line1Flights = (await _flightService.GetFlightsByFlightNumberAndDateRangeAsync(
-            connection.FlightNumber1, startDateOnly, endDateOnly)).ToList();
+        resultViewModel.Line1Flight = (await _flightService.GetFlightByFlightNumberAndDateAsync(
+            connection.FlightNumber1, travelDateOnly));
 
         // If there's a second line, get flights for it
         if (connection.Lines >= 2 && connection.FlightNumber2.HasValue)
@@ -146,8 +146,8 @@ public class SearchController : Controller
             resultViewModel.FlightNumber2 = connection.FlightNumber2;
             resultViewModel.Line2DepartureCity = connection.FlightNumber2Navigation.Departure.Name;
             resultViewModel.Line2ArrivalCity = connection.FlightNumber2Navigation.Arrival.Name;
-            resultViewModel.Line2Flights = (await _flightService.GetFlightsByFlightNumberAndDateRangeAsync(
-                connection.FlightNumber2.Value, startDateOnly, endDateOnly)).ToList();
+            resultViewModel.Line2Flight = (await _flightService.GetFlightByFlightNumberAndDateAsync(
+                connection.FlightNumber2.Value, travelDateOnly));
         }
 
         // If there's a third line, get flights for it
@@ -156,8 +156,8 @@ public class SearchController : Controller
             resultViewModel.FlightNumber3 = connection.FlightNumber3;
             resultViewModel.Line3DepartureCity = connection.FlightNumber3Navigation.Departure.Name;
             resultViewModel.Line3ArrivalCity = connection.FlightNumber3Navigation.Arrival.Name;
-            resultViewModel.Line3Flights = (await _flightService.GetFlightsByFlightNumberAndDateRangeAsync(
-                connection.FlightNumber3.Value, startDateOnly, endDateOnly)).ToList();
+            resultViewModel.Line3Flight = (await _flightService.GetFlightByFlightNumberAndDateAsync(
+                connection.FlightNumber3.Value, travelDateOnly));
         }
 
         return PartialView("_SearchResultsPartial", resultViewModel);
