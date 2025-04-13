@@ -3,7 +3,9 @@ using Airways.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
+[Authorize]
 public class SearchController : Controller
 {
     private readonly ICityService _cityService;
@@ -18,6 +20,13 @@ public class SearchController : Controller
         _cityService = cityService;
         _connectionService = connectionService;
         _flightService = flightService;
+    }
+
+    
+    [AllowAnonymous]
+    public IActionResult AccessDenied()
+    {
+        return View();
     }
 
     public async Task<IActionResult> Search()
