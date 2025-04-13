@@ -1,0 +1,61 @@
+﻿
+@model Airways.ViewModels.FlightCustomizeVM
+
+<div class="card">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">Flight Details</h5>
+    </div>
+    <div class="card-body">
+        <div class="row mb-3">
+            <div class="col-12">
+                <h6>Flight #@Model.FlightNumber</h6>
+                <p class="mb-1">
+                    <strong>From:</strong> @Model.DepartureCity <span class="text-muted">(@Model.DepartureTime.ToString("HH:mm"))</span>
+                </p>
+                <p class="mb-1">
+                    <strong>To:</strong> @Model.ArrivalCity <span class="text-muted">(@Model.ArrivalTime.ToString("HH:mm"))</span>
+                </p>
+                <p class="mb-1">
+                    <strong>Date:</strong> @Model.TravelDate.ToString("yyyy-MM-dd")
+                </p>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-12">
+                <h6>Class Selection</h6>
+                <div class="form-check mb-2">
+                    <input class="form-check-input" type="radio" name="flightClass" id="economyClass" value="economy" checked>
+                    <label class="form-check-label" for="economyClass">
+                        Economy Class - @Model.PriceEconomy.ToString("C")
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="flightClass" id="businessClass" value="business">
+                    <label class="form-check-label" for="businessClass">
+                        Business Class - @Model.PriceBusiness.ToString("C")
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <button id="selectSeatsBtn" class="btn btn-primary"
+                        data-flight-id="@Model.FlightId"
+                        data-class="economy">
+                    Select Seats
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Update the selected class when radio buttons change
+    $(document).ready(function() {
+        $('input[name="flightClass"]').change(function() {
+            $('#selectSeatsBtn').attr('data-class', $(this).val());
+        });
+    });
+</script>

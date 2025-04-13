@@ -129,7 +129,42 @@ public class SearchController : Controller
         return View("Search", viewModel);
     }
 
-    
+    [HttpGet]
+    public async Task<IActionResult> CustomizeFlight(int flightId, string travelDate, decimal priceEconomy, decimal priceBusiness, int flightNumber)
+    {
+        // Parse the date from string format
+        DateOnly parsedDate;
+        if (!DateOnly.TryParse(travelDate, out parsedDate))
+        {
+            return BadRequest("Invalid date format");
+        }
+
+        // Get the flight details from the service
+        var flight = await _flightService.GetFlightByIdAsync(flightId);
+
+        if (flight == null)
+        {
+            return NotFound();
+        }
+
+        // Create the view model
+        var viewModel = new FlightCustomizeVM
+        {
+            FlightId = flightId,
+            TravelDate = parsedDate,
+            PriceEconomy = priceEconomy,
+            PriceBusiness = priceBusiness,
+            FlightNumber = flightNumber,
+            DepartureCity = flight.FlightNumberNavigation.Departure.Name,
+            ArrivalCity = flight.FlightNumberNavigation.Arrival.Name,
+            DepartureTime = flight.FlightNumberNavigation.DepartureTime,
+            ArrivalTime = flight.FlightNumberNavigation.ArrivalTime
+        };
+
+        return PartialView("_FlightCustomize", viewModel);
+    }
+
+
 
     private decimal AdjustPriceForSeasonalRates(String arrivalCity, DateOnly travelDate, decimal basePrice)
     {

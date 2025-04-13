@@ -34,8 +34,11 @@ namespace Airways.Repository
         public async Task<Flight> GetFlightByIdAsync(int flightId)
         {
             return await _context.Flights
-                .Include(f => f.FlightNumberNavigation)
-                .FirstOrDefaultAsync(f => f.FlightId == flightId);
+        .Include(f => f.FlightNumberNavigation)
+            .ThenInclude(l => l.Departure)
+        .Include(f => f.FlightNumberNavigation)
+            .ThenInclude(l => l.Arrival)
+        .FirstOrDefaultAsync(f => f.FlightId == flightId);
         }
     }
 }
