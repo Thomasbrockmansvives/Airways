@@ -130,7 +130,7 @@ public class SearchController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> CustomizeFlight(int flightId, string travelDate, decimal priceEconomy, decimal priceBusiness, int flightNumber)
+    public async Task<IActionResult> CustomizeFlight(int flightId, string travelDate, string priceEconomy, string priceBusiness, int flightNumber)
     {
         // Parse the date from string format
         DateOnly parsedDate;
@@ -139,10 +139,29 @@ public class SearchController : Controller
             return BadRequest("Invalid date format");
         }
 
-        // Get the flight details from the service
-        var flight = await _flightService.GetFlightByIdAsync(flightId);
+        // Parse decimal values using invariant culture
+        decimal parsedPriceEconomy;
+        decimal parsedPriceBusiness;
 
-        if (flight == null)
+        if (!decimal.TryParse(priceEconomy, System.Globalization.NumberStyles.Any,
+                            System.Globalization.CultureInfo.InvariantCulture, out parsedPriceEconomy) ||
+            !decimal.TryParse(priceBusiness, System.Globalization.NumberStyles.Any,
+                            System.Globalization.CultureInfo.InvariantCulture, out parsedPriceBusiness))
+        {
+            // If parsing fails, fetch the flight and recalculate prices
+            var flight = await _flightService.GetFlightByIdAsync(flightId);
+            if (flight == null)
+            {
+                return NotFound();
+            }
+
+            parsedPriceEconomy = AdjustPriceForSeasonalRates(flight.FlightNumberNavigation.Arrival.Name, parsedDate, flight.PriceEconomy);
+            parsedPriceBusiness = AdjustPriceForSeasonalRates(flight.FlightNumberNavigation.Arrival.Name, parsedDate, flight.PriceBusiness);
+        }
+
+        // Get the flight details
+        var flightDetails = await _flightService.GetFlightByIdAsync(flightId);
+        if (flightDetails == null)
         {
             return NotFound();
         }
@@ -152,13 +171,13 @@ public class SearchController : Controller
         {
             FlightId = flightId,
             TravelDate = parsedDate,
-            PriceEconomy = priceEconomy,
-            PriceBusiness = priceBusiness,
+            PriceEconomy = parsedPriceEconomy,
+            PriceBusiness = parsedPriceBusiness,
             FlightNumber = flightNumber,
-            DepartureCity = flight.FlightNumberNavigation.Departure.Name,
-            ArrivalCity = flight.FlightNumberNavigation.Arrival.Name,
-            DepartureTime = flight.FlightNumberNavigation.DepartureTime,
-            ArrivalTime = flight.FlightNumberNavigation.ArrivalTime
+            DepartureCity = flightDetails.FlightNumberNavigation.Departure.Name,
+            ArrivalCity = flightDetails.FlightNumberNavigation.Arrival.Name,
+            DepartureTime = flightDetails.FlightNumberNavigation.DepartureTime,
+            ArrivalTime = flightDetails.FlightNumberNavigation.ArrivalTime
         };
 
         return PartialView("_FlightCustomize", viewModel);

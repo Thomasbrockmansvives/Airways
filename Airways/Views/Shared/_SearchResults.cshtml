@@ -1,6 +1,6 @@
 ﻿@model Airways.ViewModels.FlightSearchResultsVM
 
-<div class="search-results" style="max-width: 80%;">
+<div class="search-results">
     <div class="alert alert-info">
         @if (Model.Lines == 1)
         {
@@ -45,11 +45,11 @@
                                         <td>@Model.Line1Flight.PriceBusiness.ToString("C")</td>
                                         <td>
                                         <td>
-                                            <a href="javascript:void(0)"
-                                               onclick="customizeFlight(@Model.Line1Flight.FlightId, '@Model.Line1Flight.Date.ToString("yyyy-MM-dd")', @Model.Line1Flight.PriceEconomy, @Model.Line1Flight.PriceBusiness, @Model.Line1Flight.FlightNumber)"
-                                               class="btn btn-sm btn-outline-primary">
-                                                <i class="bi bi-chevron-right"></i>
-                                            </a>
+                            <a href="javascript:void(0)"
+                               onclick="customizeFlight(@Model.Line1Flight.FlightId, '@Model.Line1Flight.Date.ToString("yyyy-MM-dd")', '@Model.Line1Flight.PriceEconomy.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)', '@Model.Line1Flight.PriceBusiness.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)', @Model.Line1Flight.FlightNumber)"
+                               class="btn btn-sm btn-outline-dark">
+                                <i class="bi bi-chevron-right"></i>
+                            </a>
                                         </td>
                                         </td>
                                     </tr>
@@ -90,14 +90,11 @@
                                         <td>@Model.Line2Flight.PriceBusiness.ToString("C")</td>
                                         <td>
                                         <td>
-                                            <button class="btn btn-sm btn-outline-primary customize-flight-btn"
-                                                    data-flight-id="@Model.Line2Flight.FlightId"
-                                                    data-travel-date="@Model.Line2Flight.Date.ToString("yyyy-MM-dd")"
-                                                    data-price-economy="@Model.Line2Flight.PriceEconomy"
-                                                    data-price-business="@Model.Line2Flight.PriceBusiness"
-                                                    data-flight-number="@Model.Line2Flight.FlightNumber">
-                                                <i class="bi bi-chevron-right"></i>
-                                            </button>
+                            <a href="javascript:void(0)"
+                               onclick="customizeFlight(@Model.Line2Flight.FlightId, '@Model.Line2Flight.Date.ToString("yyyy-MM-dd")', '@Model.Line2Flight.PriceEconomy.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)', '@Model.Line2Flight.PriceBusiness.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)', @Model.Line2Flight.FlightNumber)"
+                               class="btn btn-sm btn-outline-dark">
+                                <i class="bi bi-chevron-right"></i>
+                            </a>
                                         </td>
                                         </td>
                                     </tr>
@@ -137,14 +134,11 @@
                                         <td>@Model.Line3Flight.PriceBusiness.ToString("C")</td>
                                         <td>
                                         <td>
-                                            <button class="btn btn-sm btn-outline-primary customize-flight-btn"
-                                                    data-flight-id="@Model.Line3Flight.FlightId"
-                                                    data-travel-date="@Model.Line3Flight.Date.ToString("yyyy-MM-dd")"
-                                                    data-price-economy="@Model.Line3Flight.PriceEconomy"
-                                                    data-price-business="@Model.Line3Flight.PriceBusiness"
-                                                    data-flight-number="@Model.Line3Flight.FlightNumber">
-                                                <i class="bi bi-chevron-right"></i>
-                                            </button>
+                            <a href="javascript:void(0)"
+                               onclick="customizeFlight(@Model.Line3Flight.FlightId, '@Model.Line3Flight.Date.ToString("yyyy-MM-dd")', '@Model.Line3Flight.PriceEconomy.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)', '@Model.Line3Flight.PriceBusiness.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)', @Model.Line3Flight.FlightNumber)"
+                               class="btn btn-sm btn-outline-dark">
+                                <i class="bi bi-chevron-right"></i>
+                            </a>
                                         </td>
                                         </td>
                                     </tr>
@@ -159,6 +153,10 @@
 <script>
     function customizeFlight(flightId, travelDate, priceEconomy, priceBusiness, flightNumber) {
         console.log("Customizing flight:", flightId, travelDate, priceEconomy, priceBusiness, flightNumber);
+
+        // Replace commas with periods for URL encoding
+        priceEconomy = priceEconomy.replace(',', '.');
+        priceBusiness = priceBusiness.replace(',', '.');
 
         fetch(`/Search/CustomizeFlight?flightId=${flightId}&travelDate=${travelDate}&priceEconomy=${priceEconomy}&priceBusiness=${priceBusiness}&flightNumber=${flightNumber}`)
             .then(response => {
