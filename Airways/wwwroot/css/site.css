@@ -163,3 +163,12 @@ header {
 .searchResults {
     margin-top: 20px;
 }
+
+.cart-status {
+    position: relative;
+    margin-right: 15px;
+}
+
+    .cart-status .nav-link {
+        font-size: 1.2rem;
+    }

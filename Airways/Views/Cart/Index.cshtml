@@ -1,0 +1,72 @@
+﻿@model Airways.ViewModels.CartVM
+@{
+    ViewData["Title"] = "Shopping Cart";
+}
+
+<div class="container mt-4">
+    <h2>Your Flight Basket</h2>
+    <hr />
+
+    @if (Model.Items.Count == 0)
+    {
+        <div class="alert alert-info">
+            <h4 class="alert-heading">Your basket is empty</h4>
+            <p>You haven't added any flights to your basket yet.</p>
+            <hr>
+            <p class="mb-0">
+                <a asp-controller="Search" asp-action="Search" class="btn btn-dark">Search Flights</a>
+            </p>
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Departure</th>
+                        <th>Arrival</th>
+                        <th>Class</th>
+                        <th>Total Price (meal incl.)</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.Items.Count; i++)
+                    {
+                        var item = Model.Items[i];
+                        <tr>
+                            <td>@item.TravelDate.ToString("yyyy-MM-dd")</td>
+                            <td>@item.DepartureCity</td>
+                            <td>@item.ArrivalCity</td>
+                            <td>@item.DepartureTime.ToString("HH:mm")</td>
+                            <td>@item.ArrivalTime.ToString("HH:mm")</td>
+                            <td>@item.TravelClass</td>
+                            <td>€@item.TotalPrice.ToString("0.00")</td>
+                            <td>
+                                <a asp-controller="Cart" asp-action="RemoveItem" asp-route-index="@i" class="btn btn-sm btn-outline-danger">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="d-flex justify-content-between mt-4">
+            <a asp-controller="Cart" asp-action="RemoveAll" class="btn btn-outline-danger">
+                <i class="bi bi-trash"></i> Remove All
+            </a>
+            <div>
+                <span class="me-3 fw-bold">Total: €@Model.TotalCartPrice.ToString("0.00")</span>
+                <a href="#" class="btn btn-success">
+                    <i class="bi bi-check-circle"></i> Confirm Booking
+                </a>
+            </div>
+        </div>
+    }
+</div>
