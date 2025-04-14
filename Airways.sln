@@ -14,7 +14,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Airways.Services", "Airways
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Airways.Repository", "Airways.Repository\Airways.Repository.csproj", "{104293C7-435F-460C-B08E-F410A6742168}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Airways.Util", "Airways.Util\Airways.Util.csproj", "{4A47842B-B40E-418F-A43F-C24D4EE5E459}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Airways.Util", "Airways.Util\Airways.Util.csproj", "{4A47842B-B40E-418F-A43F-C24D4EE5E459}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

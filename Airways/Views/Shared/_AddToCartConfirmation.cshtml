@@ -1,0 +1,20 @@
+﻿<div class="alert alert-success">
+    <h5>Success!</h5>
+    <p>Your flight has been added to the cart.</p>
+    <hr>
+    <p><strong>Flight Details:</strong></p>
+    <p>From: @ViewBag.DepartureCity to @ViewBag.ArrivalCity</p>
+    <p>Date: @ViewBag.TravelDate, Departure Time: @ViewBag.DepartureTime</p>
+    <p>Class: @ViewBag.TravelClass (€@ViewBag.ClassPrice)</p>
+    @if (!string.IsNullOrEmpty(ViewBag.MealName))
+    {
+        <p>Meal: @ViewBag.MealName (€35.00)</p>
+    }
+    else
+    {
+        <p>Meal: No meal selected</p>
+    }
+    <p>Total Price: €@ViewBag.TotalPrice</p>
+    <hr>
+    <p>You have @TempData["CartItemCount"] item(s) in your cart.</p>
+</div>

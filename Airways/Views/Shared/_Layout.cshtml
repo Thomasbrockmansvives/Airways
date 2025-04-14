@@ -41,6 +41,13 @@
 
                     <div class="nav-spacer"></div>
 
+                    <div id="cartStatus" class="cart-status">
+                        <a href="/Cart" class="nav-link text-white">
+                            <i class="bi bi-cart3"></i>
+                            <span id="cartItemCount" class="badge bg-danger">0</span>
+                        </a>
+                    </div>
+
                     <ul class="navbar-nav" style="margin-left: 100px !important;">
                         
                         <partial name="_LoginPartial" />
@@ -64,6 +71,19 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/flightSearch.js"></script>
+    <script>
+        function updateCartStatus(count) {
+            $('#cartItemCount').text(count);
+        }
+
+        // Check cart status on page load
+        $(document).ready(function() {
+            $.getJSON('/Search/ViewCart', function(data) {
+                updateCartStatus(data.itemCount);
+                console.log("Cart contents:", data);
+            });
+        });
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

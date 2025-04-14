@@ -5,10 +5,6 @@
         <h5 class="mb-0">Flight Details</h5>
     </div>
     <div class="card-body">
-        <div id="cartMessage" class="alert alert-success" style="display: none;">
-            Flight added to your cart successfully!
-        </div>
-
         <div class="row mb-3">
             <div class="col-12">
                 <h6>Flight #@Model.FlightNumber</h6>
@@ -32,7 +28,7 @@
         }
         else
         {
-            <form id="addToCartForm">
+            <form id="addToCartForm" asp-controller="Search" asp-action="AddToCartSimple" method="post">
                 <!-- Hidden fields for flight information -->
                 <input type="hidden" name="FlightId" value="@Model.FlightId" />
                 <input type="hidden" name="TravelDate" value="@Model.TravelDate.ToString("yyyy-MM-dd")" />
@@ -40,7 +36,6 @@
                 <input type="hidden" name="ArrivalCity" value="@Model.ArrivalCity" />
                 <input type="hidden" name="DepartureTime" value="@Model.DepartureTime.ToString("HH:mm")" />
                 <input type="hidden" name="ArrivalTime" value="@Model.ArrivalTime.ToString("HH:mm")" />
-                <input type="hidden" id="totalPriceInput" name="TotalPrice" value="@Model.PriceEconomy" />
 
                 <div class="row mb-3">
                     <div class="col-12">
@@ -48,8 +43,8 @@
                         @if (Model.HasAvailableEconomySeats)
                         {
                             <div class="form-check mb-2">
-                                <input class="form-check-input class-selection" type="radio" name="TravelClass" id="economyClass" value="Economy" checked
-                                       data-price="@Model.PriceEconomy" onchange="updateTotalPrice()">
+                                <input class="form-check-input" type="radio" name="TravelClass" id="economyClass" value="Economy" checked>
+                                <input type="hidden" name="EconomyPrice" value="@Model.PriceEconomy" />
                                 <label class="form-check-label" for="economyClass">
                                     Economy Class - @Model.PriceEconomy.ToString("C")
                                 </label>
@@ -65,9 +60,9 @@
                         @if (Model.HasAvailableBusinessSeats)
                         {
                             <div class="form-check">
-                                <input class="form-check-input class-selection" type="radio" name="TravelClass" id="businessClass" value="Business"
-                                @(!Model.HasAvailableEconomySeats ? "checked" : "")
-                                       data-price="@Model.PriceBusiness" onchange="updateTotalPrice()">
+                                <input class="form-check-input" type="radio" name="TravelClass" id="businessClass" value="Business"
+                                @(!Model.HasAvailableEconomySeats ? "checked" : "")>
+                                <input type="hidden" name="BusinessPrice" value="@Model.PriceBusiness" />
                                 <label class="form-check-label" for="businessClass">
                                     Business Class - @Model.PriceBusiness.ToString("C")
                                 </label>
@@ -84,15 +79,14 @@
 
                 <div class="row mb-3">
                     <div class="col-12">
-                        <h6>Meal Selection</h6>
-                        <p><small>All meals cost an additional €35.00</small></p>
+                        <h6>Meal Selection <small>(All meals cost an additional €35.00)</small></h6>
 
                         <div class="form-group">
-                            <select class="form-control" id="mealSelection" name="MealId" onchange="updateTotalPrice()">
+                            <select class="form-control" id="mealSelection" name="MealId">
                                 <option value="">-- No meal --</option>
                                 @foreach (var meal in Model.Meals)
                                 {
-                                    <option value="@meal.MealId">
+                                    <option value="@meal.MealId" data-meal-name="@meal.Name">
                                         @meal.Name @(meal.IsLocalMeal == true ? "(Local specialty)" : "")
                                     </option>
                                 }
@@ -101,15 +95,9 @@
                     </div>
                 </div>
 
-                <div class="row mb-3">
-                    <div class="col-12">
-                        <h6>Total Price: <span id="displayTotalPrice">@Model.PriceEconomy.ToString("C")</span></h6>
-                    </div>
-                </div>
-
                 <div class="row mt-4">
                     <div class="col-12">
-                        <button type="button" id="addToCartButton" class="btn btn-primary">
+                        <button type="submit" class="btn btn-primary">
                             Add to Cart
                         </button>
                     </div>
@@ -118,32 +106,3 @@
         }
     </div>
 </div>
-
-<script>
-    
-
-    $(document).ready(function () {
-        $('#addToCartButton').click(function () {
-            var formData = $('#addToCartForm').serialize();
-
-            $.ajax({
-                url: '@Url.Action("AddToCart", "Search")',
-                type: 'POST',
-                data: formData,
-                success: function (response) {
-                    if (response.success) {
-                        $('#cartMessage').text(response.message).show();
-                        setTimeout(function () {
-                            $('#cartMessage').fadeOut();
-                        }, 3000);
-                    } else {
-                        alert('Error: ' + response.message);
-                    }
-                },
-                error: function () {
-                    alert('An error occurred while processing your request.');
-                }
-            });
-        });
-    });
-</script>

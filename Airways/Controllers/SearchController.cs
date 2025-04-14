@@ -202,31 +202,76 @@ public class SearchController : Controller
         return PartialView("_FlightCustomize", viewModel);
     }
 
-    [HttpPost]
-    public IActionResult AddToCart(CartItemVM cartItem)
-    {
-        // Get existing cart items from TempData or create new list
-        List<CartItemVM> cartItems;
 
-        if (TempData["Cart"] != null)
+    [HttpPost]
+    public IActionResult AddToCartSimple(int flightId, string travelDate, string departureCity, string arrivalCity,
+    string departureTime, string arrivalTime, string travelClass, int? mealId, decimal economyPrice, decimal businessPrice)
+    {
+        // Bereken de prijzen op basis van de geselecteerde opties
+        decimal classPrice = travelClass == "Economy" ? economyPrice : businessPrice;
+        decimal mealPrice = mealId.HasValue ? 35.00m : 0;
+        decimal totalPrice = classPrice + mealPrice;
+
+        // Haal de maaltijd naam op als er een maaltijd is geselecteerd
+        string mealName = "";
+        if (mealId.HasValue)
         {
-            string jsonCart = TempData["Cart"].ToString();
-            cartItems = JsonSerializer.Deserialize<List<CartItemVM>>(jsonCart);
+            var meal = _mealService.GetMealByIdAsync(mealId.Value).Result;
+            mealName = meal?.Name ?? "";
+        }
+
+        // Sla alles op in ViewBag voor de bevestigingsweergave
+        ViewBag.FlightId = flightId;
+        ViewBag.TravelDate = travelDate;
+        ViewBag.DepartureCity = departureCity;
+        ViewBag.ArrivalCity = arrivalCity;
+        ViewBag.DepartureTime = departureTime;
+        ViewBag.ArrivalTime = arrivalTime;
+        ViewBag.TravelClass = travelClass;
+        ViewBag.MealId = mealId;
+        ViewBag.MealName = mealName;
+        ViewBag.TotalPrice = totalPrice;
+        ViewBag.ClassPrice = classPrice;
+
+        // Sla op in de cart
+        List<dynamic> cartItems;
+
+        if (TempData["SimpleCart"] != null)
+        {
+            cartItems = JsonSerializer.Deserialize<List<dynamic>>(TempData["SimpleCart"].ToString());
         }
         else
         {
-            cartItems = new List<CartItemVM>();
+            cartItems = new List<dynamic>();
         }
 
-        // Add the new item to the cart
-        cartItems.Add(cartItem);
+        // Voeg toe aan cart
+        cartItems.Add(new
+        {
+            FlightId = flightId,
+            TravelDate = travelDate,
+            DepartureCity = departureCity,
+            ArrivalCity = arrivalCity,
+            DepartureTime = departureTime,
+            ArrivalTime = arrivalTime,
+            TravelClass = travelClass,
+            MealId = mealId,
+            MealName = mealName,
+            TotalPrice = totalPrice,
+            ClassPrice = classPrice
+        });
 
-        // Store updated cart back in TempData
-        TempData["Cart"] = JsonSerializer.Serialize(cartItems);
+        // Update TempData
+        TempData["SimpleCart"] = JsonSerializer.Serialize(cartItems);
+        TempData["CartItemCount"] = cartItems.Count;
 
-        // Return JSON response
-        return Json(new { success = true, message = "Flight added to your cart successfully!" });
+        // Toon de bevestigingsview
+        return PartialView("_AddToCartConfirmation");
     }
+
+
+
+
 
     private decimal AdjustPriceForSeasonalRates(String arrivalCity, DateOnly travelDate, decimal basePrice)
     {
