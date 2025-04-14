@@ -33,6 +33,10 @@ builder.Services.AddScoped<IFlightDAO, FlightDAO>();
 builder.Services.AddScoped<IFlightService, FlightService>();
 builder.Services.AddScoped<IMealDAO, MealDAO>();
 builder.Services.AddScoped<IMealService, MealService>();
+builder.Services.AddScoped<IBookingDAO, BookingDAO>();
+builder.Services.AddScoped<ICustomerPrefDAO, CustomerPrefDAO>();
+builder.Services.AddScoped<IBookingService, BookingService>();
+builder.Services.AddScoped<ICustomerPrefService, CustomerPrefService>();
 
 // Add EmailSettings
 var emailSettings = new Airways.Util.Mail.EmailSettings();

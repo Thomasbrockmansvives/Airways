@@ -1,0 +1,46 @@
+﻿@model Airways.ViewModels.BookingConfirmationVM
+@{
+    ViewData["Title"] = "Booking Confirmation";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h3>Booking Confirmation</h3>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-4">
+                        <i class="bi bi-check-circle-fill text-success" style="font-size: 4rem;"></i>
+                    </div>
+
+                    <h4 class="text-center mb-4">Thank you for your booking, @Model.CustomerName!</h4>
+
+                    <p class="lead text-center">
+                        Your @Model.BookingCount flight@(Model.BookingCount > 1 ? "s have" : " has") been successfully booked.
+                    </p>
+
+                    <p class="text-center">
+                        A confirmation email with all booking details has been sent to @Model.CustomerEmail.
+                    </p>
+
+                    <p class="text-center font-weight-bold">
+                        Total amount: €@Model.TotalAmount.ToString("0.00")
+                    </p>
+
+                    <hr class="my-4">
+
+                    <div class="d-flex justify-content-center">
+                        <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary me-3">
+                            <i class="bi bi-house-door"></i> Return to Home
+                        </a>
+                        <a asp-controller="Search" asp-action="Search" class="btn btn-dark">
+                            <i class="bi bi-search"></i> Book Another Flight
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

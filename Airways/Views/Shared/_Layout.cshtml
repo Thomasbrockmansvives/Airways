@@ -26,7 +26,7 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end">
-                    <ul class="navbar-nav">
+                    <ul class="navbar-nav me-auto">
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
@@ -36,21 +36,19 @@
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Bookings" asp-action="Bookings">My Bookings</a>
                         </li>
-                        
                     </ul>
 
-                    <div class="nav-spacer"></div>
-
-                    <div id="cartStatus" class="cart-status">
-                        <a href="/Cart" class="nav-link text-white">
-                            <i class="bi bi-cart3"></i>
+                    <div class="d-flex align-items-center me-3">
+                        <a class="nav-link text-white" asp-controller="Cart" asp-action="Index">
+                            <i class="bi bi-cart text-white"></i> Flight Basket
+                            @if (TempData["CartItemCount"] != null && (int)TempData["CartItemCount"] > 0)
+                            {
+                                <span class="badge bg-danger">@TempData["CartItemCount"]</span>
+                            }
                         </a>
                     </div>
 
-                    <ul class="navbar-nav" style="margin-left: 100px !important;">
-                        
-                        <partial name="_LoginPartial" />
-                    </ul>
+                    <partial name="_LoginPartial" />
                 </div>
             </div>
         </nav>

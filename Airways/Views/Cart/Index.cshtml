@@ -7,6 +7,13 @@
     <h2>Your Flight Basket</h2>
     <hr />
 
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
     @if (Model.Items.Count == 0)
     {
         <div class="alert alert-info">
@@ -63,9 +70,11 @@
             </a>
             <div>
                 <span class="me-3 fw-bold">Total: €@Model.TotalCartPrice.ToString("0.00")</span>
-                <a href="#" class="btn btn-success">
-                    <i class="bi bi-check-circle"></i> Confirm Booking
-                </a>
+                <form asp-controller="Cart" asp-action="ConfirmBooking" method="post" class="d-inline">
+                    <button type="submit" class="btn btn-success">
+                        <i class="bi bi-check-circle"></i> Confirm Booking
+                    </button>
+                </form>
             </div>
         </div>
     }
