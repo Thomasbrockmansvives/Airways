@@ -1,5 +1,4 @@
-﻿
-@model Airways.ViewModels.FlightCustomizeVM
+﻿@model Airways.ViewModels.FlightCustomizeVM
 
 <div class="card">
     <div class="card-header bg-dark text-white">
@@ -21,41 +20,85 @@
             </div>
         </div>
 
-        <div class="row mb-3">
-            <div class="col-12">
-                <h6>Class Selection</h6>
-                <div class="form-check mb-2">
-                    <input class="form-check-input" type="radio" name="flightClass" id="economyClass" value="economy" checked>
-                    <label class="form-check-label" for="economyClass">
-                        Economy Class - @Model.PriceEconomy.ToString("C")
-                    </label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="flightClass" id="businessClass" value="business">
-                    <label class="form-check-label" for="businessClass">
-                        Business Class - @Model.PriceBusiness.ToString("C")
-                    </label>
-                </div>
+        @if (!Model.HasAvailableEconomySeats && !Model.HasAvailableBusinessSeats)
+        {
+            <div class="alert alert-warning">
+                <strong>Sorry!</strong> This flight has no seats left in any class.
             </div>
-        </div>
+        }
+        else
+        {
+            <div class="row mb-3">
+                <div class="col-12">
+                    <h6>Class Selection</h6>
+                    @if (Model.HasAvailableEconomySeats)
+                    {
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="flightClass" id="economyClass" value="economy" checked>
+                            <label class="form-check-label" for="economyClass">
+                                Economy Class - @Model.PriceEconomy.ToString("C")
+                            </label>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-danger mb-2">
+                            <small>Economy Class - No seats left</small>
+                        </div>
+                    }
 
-        <div class="row">
-            <div class="col-12">
-                <button id="selectSeatsBtn" class="btn btn-dark"
-                        data-flight-id="@Model.FlightId"
-                        data-class="economy">
-                    Select Seats
-                </button>
+                    @if (Model.HasAvailableBusinessSeats)
+                    {
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="flightClass" id="businessClass" value="business" @(!Model.HasAvailableEconomySeats ? "checked" : "")>
+                            <label class="form-check-label" for="businessClass">
+                                Business Class - @Model.PriceBusiness.ToString("C")
+                            </label>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-danger">
+                            <small>Business Class - No seats left</small>
+                        </div>
+                    }
+                </div>
             </div>
-        </div>
+
+            <div class="row mb-3">
+                <div class="col-12">
+                    <h6>Meal Selection <small>(additional €35.00)</small></h6>
+                
+
+                    <div class="form-group">
+                        <select class="form-control" id="mealSelection" name="mealId">
+                            <option value="">-- No meal --</option>
+                            @foreach (var meal in Model.Meals)
+                            {
+                                <option value="@meal.MealId">
+                                    @meal.Name @(meal.IsLocalMeal == true ? "(Local specialty)" : "")
+                                </option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-12">
+                    <button id="addToCartBtn" class="btn btn-primary">
+                        Add to Cart
+                    </button>
+                </div>
+            </div>
+        }
     </div>
 </div>
 
 <script>
-    // Update the selected class when radio buttons change
-    $(document).ready(function() {
-        $('input[name="flightClass"]').change(function() {
-            $('#selectSeatsBtn').attr('data-class', $(this).val());
+    $(document).ready(function () {
+        $('input[name="flightClass"]').change(function () {
+            $('#addToCartBtn').attr('data-class', $(this).val());
         });
     });
 </script>

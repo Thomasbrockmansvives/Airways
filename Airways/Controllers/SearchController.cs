@@ -173,7 +173,8 @@ public class SearchController : Controller
         var availableEconomySeats = await _flightService.IsEconomyAvailableByFlightAsync(flightId);
         var availableBusinessSeats = await _flightService.IsBusinessAvailableByFlightAsync(flightId);
 
-        var meals = await _mealService.GetMealsByCityIdAsync(flightId);
+        var arrivalCity = flightDetails.FlightNumberNavigation.Arrival.CityId;
+        var meals = await _mealService.GetMealsByCityIdAsync(arrivalCity);
 
 
 
