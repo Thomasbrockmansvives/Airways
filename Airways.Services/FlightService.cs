@@ -25,5 +25,15 @@ namespace Airways.Services
         {
             return await _flightDAO.GetFlightByIdAsync(flightId);
         }
+
+        public async Task<bool> IsEconomyAvailableByFlightAsync(int flightId)
+        {
+            return await _flightDAO.IsEconomyAvailableByFlight(flightId);
+        }
+
+        public async Task<bool> IsBusinessAvailableByFlightAsync(int flightId)
+        {
+            return await _flightDAO.IsBusinessAvailableByFlight(flightId);
+        }
     }
 }

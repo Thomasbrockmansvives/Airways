@@ -40,5 +40,32 @@ namespace Airways.Repository
             .ThenInclude(l => l.Arrival)
         .FirstOrDefaultAsync(f => f.FlightId == flightId);
         }
+
+        public async Task<Boolean> IsEconomyAvailableByFlight(int flightId)
+        {
+            var flight = await _context.Flights
+                .Include(f => f.FlightNumberNavigation)
+                .FirstOrDefaultAsync(f => f.FlightId == flightId);
+
+            if (flight == null)
+                return false;
+
+            
+            return flight.UsedSeatsEconomy < flight.FlightNumberNavigation.TotalSeatsEconomy;
+        }
+
+        public async Task<Boolean> IsBusinessAvailableByFlight(int flightId)
+        {
+            var flight = await _context.Flights
+                .Include(f => f.FlightNumberNavigation)
+                .FirstOrDefaultAsync(f => f.FlightId == flightId);
+
+            if (flight == null)
+                return false;
+
+           
+            return flight.UsedSeatsBusiness < flight.FlightNumberNavigation.TotalSeatsBusiness;
+        }
+
     }
 }
