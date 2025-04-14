@@ -31,3 +31,16 @@
         </div>
     </div>
 </div>
+
+<script>
+    function updateTotalPrice() {
+        var selectedClassPrice = parseFloat($('input[name="TravelClass"]:checked').data('price'));
+        var mealPrice = $('#mealSelection').val() ? 35.0 : 0.0;
+        var totalPrice = selectedClassPrice + mealPrice;
+
+        $('#displayTotalPrice').text('€' + totalPrice.toFixed(2));
+        $('#totalPriceInput').val(totalPrice);
+    }
+
+    
+    </script>

@@ -5,6 +5,9 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using System.Data;
+using Airways.Infrastructure;
+using System.Text.Json;
+
 
 [Authorize]
 public class SearchController : Controller
@@ -199,7 +202,31 @@ public class SearchController : Controller
         return PartialView("_FlightCustomize", viewModel);
     }
 
+    [HttpPost]
+    public IActionResult AddToCart(CartItemVM cartItem)
+    {
+        // Get existing cart items from TempData or create new list
+        List<CartItemVM> cartItems;
 
+        if (TempData["Cart"] != null)
+        {
+            string jsonCart = TempData["Cart"].ToString();
+            cartItems = JsonSerializer.Deserialize<List<CartItemVM>>(jsonCart);
+        }
+        else
+        {
+            cartItems = new List<CartItemVM>();
+        }
+
+        // Add the new item to the cart
+        cartItems.Add(cartItem);
+
+        // Store updated cart back in TempData
+        TempData["Cart"] = JsonSerializer.Serialize(cartItems);
+
+        // Return JSON response
+        return Json(new { success = true, message = "Flight added to your cart successfully!" });
+    }
 
     private decimal AdjustPriceForSeasonalRates(String arrivalCity, DateOnly travelDate, decimal basePrice)
     {
