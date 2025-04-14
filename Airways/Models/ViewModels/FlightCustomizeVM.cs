@@ -1,4 +1,5 @@
 ﻿
+using Airways.Domain.EntitiesDB;
 using System;
 
 namespace Airways.ViewModels
@@ -14,5 +15,11 @@ namespace Airways.ViewModels
         public string ArrivalCity { get; set; }
         public TimeOnly DepartureTime { get; set; }
         public TimeOnly ArrivalTime { get; set; }
+        public IEnumerable<Meal> Meals { get; set; }
+        public int? SelectedMealId { get; set; }
+        public bool HasSelectedMeal => SelectedMealId.HasValue;
+        public bool HasAvailableEconomySeats { get; set; }
+        public bool HasAvailableBusinessSeats { get; set; }
+
     }
 }

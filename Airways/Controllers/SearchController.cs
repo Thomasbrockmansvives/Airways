@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using System.Data;
 
 [Authorize]
 public class SearchController : Controller
@@ -11,15 +12,18 @@ public class SearchController : Controller
     private readonly ICityService _cityService;
     private readonly IConnectionService _connectionService;
     private readonly IFlightService _flightService;
+    private readonly IMealService _mealService;
 
     public SearchController(
         ICityService cityService,
         IConnectionService connectionService,
-        IFlightService flightService)
+        IFlightService flightService,
+        IMealService mealService)
     {
         _cityService = cityService;
         _connectionService = connectionService;
         _flightService = flightService;
+        _mealService = mealService;
     }
 
     
@@ -166,6 +170,14 @@ public class SearchController : Controller
             return NotFound();
         }
 
+        var availableEconomySeats = await _flightService.IsEconomyAvailableByFlightAsync(flightId);
+        var availableBusinessSeats = await _flightService.IsBusinessAvailableByFlightAsync(flightId);
+
+        var meals = await _mealService.GetMealsByCityIdAsync(flightId);
+
+
+
+
         // Create the view model
         var viewModel = new FlightCustomizeVM
         {
@@ -177,7 +189,10 @@ public class SearchController : Controller
             DepartureCity = flightDetails.FlightNumberNavigation.Departure.Name,
             ArrivalCity = flightDetails.FlightNumberNavigation.Arrival.Name,
             DepartureTime = flightDetails.FlightNumberNavigation.DepartureTime,
-            ArrivalTime = flightDetails.FlightNumberNavigation.ArrivalTime
+            ArrivalTime = flightDetails.FlightNumberNavigation.ArrivalTime,
+            HasAvailableEconomySeats = availableEconomySeats,
+            HasAvailableBusinessSeats = availableBusinessSeats,
+            Meals = meals
         };
 
         return PartialView("_FlightCustomize", viewModel);

@@ -21,16 +21,18 @@ builder.Services.AddControllersWithViews()
     });
 
 // Add Dependency Injections
-builder.Services.AddScoped<Airways.Repository.Interfaces.ICustomerProfileDAO, Airways.Repository.CustomerProfileDAO>();
-builder.Services.AddScoped<Airways.Services.Interfaces.ICustomerProfileService, Airways.Services.CustomerProfileService>();
-builder.Services.AddScoped<Airways.Repository.Interfaces.ICityDAO, Airways.Repository.CityDAO>();
-builder.Services.AddScoped<Airways.Services.Interfaces.ICityService, Airways.Services.CityService>();
+builder.Services.AddScoped<ICustomerProfileDAO, CustomerProfileDAO>();
+builder.Services.AddScoped<ICustomerProfileService, CustomerProfileService>();
+builder.Services.AddScoped<ICityDAO, CityDAO>();
+builder.Services.AddScoped<ICityService, CityService>();
 builder.Services.AddScoped<ICityDAO, CityDAO>();
 builder.Services.AddScoped<ICityService, CityService>();
 builder.Services.AddScoped<IConnectionDAO, ConnectionDAO>();
 builder.Services.AddScoped<IConnectionService, ConnectionService>();
 builder.Services.AddScoped<IFlightDAO, FlightDAO>();
 builder.Services.AddScoped<IFlightService, FlightService>();
+builder.Services.AddScoped<IMealDAO, MealDAO>();
+builder.Services.AddScoped<IMealService, MealService>();
 
 // Add EmailSettings
 var emailSettings = new Airways.Util.Mail.EmailSettings();
