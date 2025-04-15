@@ -8,7 +8,14 @@ using System.Text.Json;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
 
-[Authorize]
+/*
+ * this controller is (together with the cartController) my most difficult piece.
+ * because i have been struggling a lot with it and used the help of chatgpt/copilot,
+ * i use some commenting for myself to understand the code better
+ * especially for the use of tempdata and jsonserialiser and invariant culture
+ */
+
+[Authorize] // user must be logged in
 public class SearchController : Controller
 {
     private readonly ICityService _cityService;
@@ -29,7 +36,7 @@ public class SearchController : Controller
     }
 
     
-    [AllowAnonymous]
+    [AllowAnonymous] // can of course be accessed when not logged in
     public IActionResult AccessDenied()
     {
         return View();
@@ -148,7 +155,9 @@ public class SearchController : Controller
             return BadRequest("Invalid date format");
         }
 
-        // decimal values using invariant culture
+        /* decimal values using invariant culture
+         * to handle decimal values when formatting currency
+         */
         decimal parsedPriceEconomy;
         decimal parsedPriceBusiness;
 
@@ -224,7 +233,7 @@ public class SearchController : Controller
             mealName = meal?.Name ?? "";
         }
 
-        // Save in viewbag
+        // Save in viewbag to be used in confirmation view
 
         ViewBag.FlightId = flightId;
         ViewBag.TravelDate = travelDate;
@@ -240,7 +249,9 @@ public class SearchController : Controller
 
         List<dynamic> cartItems;
 
-        if (TempData["SimpleCart"] != null)
+        // create a new shopping cart or use existing one
+
+        if (TempData["SimpleCart"] != null) 
         {
             cartItems = JsonSerializer.Deserialize<List<dynamic>>(TempData["SimpleCart"].ToString());
         }
