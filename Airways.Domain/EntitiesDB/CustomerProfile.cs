@@ -5,9 +5,9 @@ namespace Airways.Domain.EntitiesDB;
 
 public partial class CustomerProfile
 {
-    public int ProfileId { get; set; }
+    public int ProfileId { get; set; } // Booking refers to this
 
-    public string UserId { get; set; } = null!;
+    public string UserId { get; set; } = null!; // refers to ASP.NET Identity UserId
 
     public string FirstName { get; set; } = null!;
 

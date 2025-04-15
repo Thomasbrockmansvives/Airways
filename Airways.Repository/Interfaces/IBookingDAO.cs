@@ -11,5 +11,7 @@ namespace Airways.Repository.Interfaces
         Task<int> GetNextAvailableSeatNumberAsync(int flightId, string travelClass);
         Task<IEnumerable<Booking>> GetBookingsByCustomerIdAsync(int customerId);
         Task<Booking> GetBookingByIdAsync(int bookingId);
+
+        Task<bool> UpdateBookingAsync(Booking booking);
     }
 }

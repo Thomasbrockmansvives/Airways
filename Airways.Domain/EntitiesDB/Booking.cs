@@ -7,7 +7,7 @@ public partial class Booking
 {
     public int BookingId { get; set; }
 
-    public int CustomerId { get; set; }
+    public int CustomerId { get; set; } // refers to ProfileId in CustomerProfile
 
     public int FlightId { get; set; }
 

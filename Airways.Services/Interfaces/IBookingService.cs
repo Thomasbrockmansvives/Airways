@@ -13,5 +13,7 @@ namespace Airways.Services.Interfaces
         Task<IEnumerable<Booking>> GetBookingsByCustomerIdAsync(int customerId);
         
         Task<Booking> GetBookingByIdAsync(int bookingId);
+
+        Task<bool> UpdateBookingAsync(int bookingId);
     }
 }

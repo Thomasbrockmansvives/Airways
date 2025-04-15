@@ -1,6 +1,7 @@
 ﻿using Airways.Domain.EntitiesDB;
 using Airways.Repository.Interfaces;
 using Airways.Services.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -43,6 +44,20 @@ namespace Airways.Services
         public async Task<Booking> GetBookingByIdAsync(int bookingId)
         {
             return await _bookingDAO.GetBookingByIdAsync(bookingId);
+        }
+
+        public async Task<bool> UpdateBookingAsync(int bookingId)
+        {
+            var booking = await _bookingDAO.GetBookingByIdAsync(bookingId);
+            if (booking == null)
+            {
+                return false;
+            }
+
+            // Set seat number to 0 to mark as cancelled
+            booking.SeatNumber = 0;
+
+            return await _bookingDAO.UpdateBookingAsync(booking);
         }
     }
 }

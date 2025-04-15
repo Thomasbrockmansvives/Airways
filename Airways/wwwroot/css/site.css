@@ -176,3 +176,30 @@ header {
 .no-hover {
     pointer-events: none;
 }
+
+
+.small-table {
+    font-size: 0.85rem;
+}
+
+.small-table th {
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+
+.small-table .small-header th {
+        font-size: 0.85rem;
+    }
+
+.small-table .small-text td {
+        font-size: 0.85rem;
+    }
+
+.small-table .btn {
+        font-size: 0.75rem;
+        padding: 0.2rem 0.5rem;
+    }
+
+.small-table .badge {
+        font-size: 0.75rem;
+    }

@@ -100,5 +100,20 @@ namespace Airways.Repository
                 .Include(b => b.Meal)
                 .FirstOrDefaultAsync(b => b.BookingId == bookingId);
         }
+
+        public async Task<bool> UpdateBookingAsync(Booking booking)
+        {
+            try
+            {
+                _context.Bookings.Update(booking);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error updating booking: {ex.Message}");
+                return false;
+            }
+        }
     }
 }
