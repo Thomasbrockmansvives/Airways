@@ -10,6 +10,8 @@ using Airways.Repository.Interfaces;
 using Airways.Services.Interfaces;
 
 namespace Airways.Services
+
+    // when a new user is created, also a customerprofile should be created and synced to it
 {
     public class CustomerProfileService : ICustomerProfileService
     {

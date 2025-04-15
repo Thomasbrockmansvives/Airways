@@ -9,6 +9,8 @@ namespace Airways.Services.Interfaces
     {
         Task<Flight> GetFlightByFlightNumberAndDateAsync(int flightNumber, DateOnly travelDate);
         Task<Flight> GetFlightByIdAsync(int flightId);
+
+        // checking available seats
         Task<bool> IsEconomyAvailableByFlightAsync(int flightId);
         Task<bool> IsBusinessAvailableByFlightAsync(int flightId);
     }

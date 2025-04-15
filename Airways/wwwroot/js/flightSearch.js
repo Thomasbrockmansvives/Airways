@@ -5,14 +5,7 @@
     const startDateInput = document.getElementById('startDate');
     const endDateInput = document.getElementById('endDate');
 
-    if (startDateInput && endDateInput) {
-        startDateInput.addEventListener('change', function () {
-            if (endDateInput.value && new Date(endDateInput.value) < new Date(startDateInput.value)) {
-                endDateInput.value = startDateInput.value;
-            }
-            endDateInput.min = startDateInput.value;
-        });
-    }
+    
 
     if (flightSearchForm) {
         flightSearchForm.addEventListener('submit', function (event) {
@@ -27,16 +20,7 @@
                 }
             }
 
-            if (startDateInput && endDateInput) {
-                const startDate = new Date(startDateInput.value);
-                const endDate = new Date(endDateInput.value);
-
-                if (endDate < startDate) {
-                    alert('End date cannot be before start date.');
-                    event.preventDefault();
-                    return false;
-                }
-            }
+          
         });
     }
 });

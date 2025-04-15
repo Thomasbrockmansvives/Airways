@@ -42,7 +42,7 @@ namespace Airways.Repository
         private async Task<int> GenerateUniqueProfileIdAsync()
         {
             int maxId = await _flightBookingDBContext.CustomerProfiles.MaxAsync(cp => (int?)cp.ProfileId) ?? 0; ;
-            return maxId + 1;
+            return maxId + 1; //sequencing
         }
 
         public async Task<CustomerProfile> GetCustomerProfileByUserIdAsync(string userId)

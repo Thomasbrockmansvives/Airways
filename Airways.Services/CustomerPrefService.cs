@@ -1,5 +1,4 @@
-﻿// CustomerPrefService.cs
-using Airways.Domain.EntitiesDB;
+﻿using Airways.Domain.EntitiesDB;
 using Airways.Repository.Interfaces;
 using Airways.Services.Interfaces;
 using System.Threading.Tasks;

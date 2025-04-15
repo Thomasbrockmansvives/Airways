@@ -15,6 +15,8 @@ namespace Airways.Util.Mail
     {
         private readonly EmailSettings _emailSettings;
 
+        // dependency injection
+
         public EmailSend(EmailSettings emailSettings)
         {
             _emailSettings = emailSettings;
@@ -39,6 +41,7 @@ namespace Airways.Util.Mail
                     await smtp.SendMailAsync(mail);
                 }
             }
+            
             catch (Exception ex)
             {
                 throw ex;

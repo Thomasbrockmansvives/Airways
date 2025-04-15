@@ -22,9 +22,9 @@ namespace Airways.Repository
         {
             return await _context.Flights
                 .Include(f => f.FlightNumberNavigation)
-                    .ThenInclude(l => l.Departure)
+                    .ThenInclude(l => l.Departure) //lookup
                 .Include(f => f.FlightNumberNavigation)
-                    .ThenInclude(l => l.Arrival)
+                    .ThenInclude(l => l.Arrival) //lookup
                 .Where(f => f.FlightNumber == flightNumber &&
                        f.Date == travelDate)
                 .OrderBy(f => f.Date)
@@ -35,9 +35,9 @@ namespace Airways.Repository
         {
             return await _context.Flights
         .Include(f => f.FlightNumberNavigation)
-            .ThenInclude(l => l.Departure)
+            .ThenInclude(l => l.Departure) //lookup
         .Include(f => f.FlightNumberNavigation)
-            .ThenInclude(l => l.Arrival)
+            .ThenInclude(l => l.Arrival) //lookup
         .FirstOrDefaultAsync(f => f.FlightId == flightId);
         }
 

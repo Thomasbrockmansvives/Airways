@@ -1,5 +1,4 @@
-﻿// BookingService.cs
-using Airways.Domain.EntitiesDB;
+﻿using Airways.Domain.EntitiesDB;
 using Airways.Repository.Interfaces;
 using Airways.Services.Interfaces;
 using System;
@@ -19,7 +18,10 @@ namespace Airways.Services
 
         public async Task<Booking> CreateBookingAsync(int customerId, int flightId, DateOnly travelDate, decimal totalPrice, int? mealId, string travelClass)
         {
-            // Get the next available seat number for this flight and class
+            /* Get next available seat number for this flight and class, 
+             * because we don't just give the next seat in the list.
+             * sometimes, because another customer cancelled, a lower seatnumber became available
+             */
             int seatNumber = await _bookingDAO.GetNextAvailableSeatNumberAsync(flightId, travelClass);
 
             // Create the booking

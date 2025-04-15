@@ -53,7 +53,7 @@ namespace Airways.Repository
         public async Task<int> GenerateUniquePrefIdAsync()
         {
             int maxId = await _context.CustomerPrefs.MaxAsync(cp => (int?)cp.PrefId) ?? 0;
-            return maxId + 1;
+            return maxId + 1; //sequence
         }
     }
 }

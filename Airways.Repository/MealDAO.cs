@@ -1,5 +1,4 @@
-﻿
-using Airways.Domain.DataDB;
+﻿using Airways.Domain.DataDB;
 using Airways.Domain.EntitiesDB;
 using Airways.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;

@@ -20,15 +20,14 @@ namespace Airways.Repository
 
         public async Task<Booking> CreateBookingAsync(int customerId, int flightId, DateOnly bookingDate, decimal totalPrice, int? mealId, string travelClass, int seatNumber)
         {
-            // Generate a new unique booking ID
-            int newBookingId = await GenerateUniqueBookingIdAsync();
+                        int newBookingId = await GenerateUniqueBookingIdAsync();
 
             var booking = new Booking
             {
                 BookingId = newBookingId,
                 CustomerId = customerId,
                 FlightId = flightId,
-                BookingDate = DateOnly.FromDateTime(DateTime.Now), // Today's date as booking date
+                BookingDate = DateOnly.FromDateTime(DateTime.Now),
                 TotalPrice = totalPrice,
                 MealId = mealId,
                 Class = travelClass,
@@ -37,7 +36,7 @@ namespace Airways.Repository
 
             _context.Bookings.Add(booking);
 
-            // Update seat counters in the Flight table
+            
             var flight = await _context.Flights.FindAsync(flightId);
             if (flight != null)
             {
@@ -63,14 +62,14 @@ namespace Airways.Repository
 
         public async Task<int> GetNextAvailableSeatNumberAsync(int flightId, string travelClass)
         {
-            // Get the highest seat number currently used for this flight and class
+            
             var highestSeatNumber = await _context.Bookings
                 .Where(b => b.FlightId == flightId && b.Class == travelClass)
                 .OrderByDescending(b => b.SeatNumber)
                 .Select(b => b.SeatNumber)
                 .FirstOrDefaultAsync();
 
-            // Return the next available seat number (starting from 1 if no seats are taken)
+            
             return highestSeatNumber + 1;
         }
 
