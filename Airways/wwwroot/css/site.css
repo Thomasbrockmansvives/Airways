@@ -169,6 +169,10 @@ header {
     margin-right: 15px;
 }
 
-    .cart-status .nav-link {
+.cart-status .nav-link {
         font-size: 1.2rem;
     }
+
+.no-hover {
+    pointer-events: none;
+}

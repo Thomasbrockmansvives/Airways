@@ -2,6 +2,9 @@
 
 <div class="search-results">
     <div class="alert alert-info">
+
+        <!-- depending on the amount of lines in the connection -->
+
         @if (Model.Lines == 1)
         {
             <p><strong>STEP 2: </strong>Select your preferred day for your flight.</p>
@@ -22,7 +25,7 @@
                 <div class="table-responsive">
                     <table class="table table-hover">
                         <thead>
-                            <tr>
+                            <tr><!-- header of table -->
                                 <th>Date</th>
                                 <th>From</th>
                                 <th>To</th>
@@ -67,7 +70,8 @@
                 <div class="table-responsive">
                     <table class="table table-hover">
                         <thead>
-                            <tr>
+                    <tr>
+                        <!-- header of table -->
                                 <th>Date</th>
                                 <th>From</th>
                                 <th>To</th>
@@ -111,7 +115,8 @@
                 <div class="table-responsive">
                     <table class="table table-hover">
                         <thead>
-                            <tr>
+                    <tr>
+                        <!-- header of table -->
                                 <th>Date</th>
                                 <th>From</th>
                                 <th>To</th>
@@ -133,7 +138,7 @@
                                         <td>@Model.Line3Flight.PriceEconomy.ToString("C")</td>
                                         <td>@Model.Line3Flight.PriceBusiness.ToString("C")</td>
                                         <td>
-                                        <td>
+                                        <td> <!-- button that calls javascript and uses action with parameters -->
                             <a href="javascript:void(0)"
                                onclick="customizeFlight(@Model.Line3Flight.FlightId, '@Model.Line3Flight.Date.ToString("yyyy-MM-dd")', '@Model.Line3Flight.PriceEconomy.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)', '@Model.Line3Flight.PriceBusiness.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)', @Model.Line3Flight.FlightNumber)"
                                class="btn btn-sm btn-outline-dark">
@@ -154,9 +159,7 @@
     function customizeFlight(flightId, travelDate, priceEconomy, priceBusiness, flightNumber) {
         console.log("Customizing flight:", flightId, travelDate, priceEconomy, priceBusiness, flightNumber);
 
-        // Replace commas with periods for URL encoding
-        priceEconomy = priceEconomy.replace(',', '.');
-        priceBusiness = priceBusiness.replace(',', '.');
+        
 
         fetch(`/Search/CustomizeFlight?flightId=${flightId}&travelDate=${travelDate}&priceEconomy=${priceEconomy}&priceBusiness=${priceBusiness}&flightNumber=${flightNumber}`)
             .then(response => {

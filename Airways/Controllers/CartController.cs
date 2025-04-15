@@ -1,5 +1,4 @@
-﻿using Airways.Infrastructure;
-using Airways.Services.Interfaces;
+﻿using Airways.Services.Interfaces;
 using Airways.Util.Mail.Interfaces;
 using Airways.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -7,7 +6,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -51,8 +49,7 @@ namespace Airways.Controllers
             {
                 try
                 {
-                    // For now, we'll continue using the dynamic approach in TempData
-                    // but convert to typed objects in our controller
+                                        
                     var itemsJson = TempData["SimpleCart"].ToString();
                     var dynamicItems = JsonSerializer.Deserialize<List<dynamic>>(itemsJson);
 
@@ -60,7 +57,7 @@ namespace Airways.Controllers
                     {
                         foreach (var item in dynamicItems)
                         {
-                            // Convert string dates/times to DateOnly/TimeOnly
+                            
                             DateOnly travelDate = DateOnly.Parse(item.GetProperty("TravelDate").GetString());
                             TimeOnly departureTime = TimeOnly.Parse(item.GetProperty("DepartureTime").GetString());
                             TimeOnly arrivalTime = TimeOnly.Parse(item.GetProperty("ArrivalTime").GetString());
@@ -82,11 +79,11 @@ namespace Airways.Controllers
                 }
                 catch (Exception ex)
                 {
-                    // Log the exception and continue with an empty cart
+                    
                     Console.WriteLine($"Error deserializing cart: {ex.Message}");
                 }
 
-                // Preserve TempData for the view
+                
                 TempData.Keep("SimpleCart");
             }
 
@@ -106,14 +103,14 @@ namespace Airways.Controllers
                     {
                         dynamicItems.RemoveAt(index);
 
-                        // Update TempData
+                        
                         TempData["SimpleCart"] = JsonSerializer.Serialize(dynamicItems);
                         TempData["CartItemCount"] = dynamicItems.Count;
                     }
                 }
                 catch (Exception ex)
                 {
-                    // Log the exception
+                    
                     Console.WriteLine($"Error removing item from cart: {ex.Message}");
                 }
             }
@@ -123,7 +120,7 @@ namespace Airways.Controllers
 
         public IActionResult RemoveAll()
         {
-            // Clear cart
+            
             TempData.Remove("SimpleCart");
             TempData["CartItemCount"] = 0;
 
@@ -140,14 +137,14 @@ namespace Airways.Controllers
 
             try
             {
-                // Get the current user
+                
                 var user = await _userManager.GetUserAsync(User);
                 if (user == null)
                 {
                     return RedirectToAction("Login", "Account");
                 }
 
-                // Get the user's profile
+                
                 var profile = await _customerProfileService.GetCustomerProfileByUserIdAsync(user.Id);
                 if (profile == null)
                 {
@@ -155,7 +152,7 @@ namespace Airways.Controllers
                     return RedirectToAction("Index", "Home");
                 }
 
-                // Deserialize cart items
+                
                 var itemsJson = TempData["SimpleCart"].ToString();
                 var dynamicItems = JsonSerializer.Deserialize<List<dynamic>>(itemsJson);
 
@@ -164,11 +161,12 @@ namespace Airways.Controllers
                     return RedirectToAction("Index");
                 }
 
-                // Lists to store booking details for email
+                // email
+
                 var bookings = new List<BookingDetailsVM>();
                 decimal totalAmount = 0;
 
-                // Email content builder
+                
                 var emailContent = new StringBuilder();
                 emailContent.AppendLine("<h2>Your Booking Confirmation</h2>");
                 emailContent.AppendLine("<p>Dear " + profile.FirstName + ",</p>");
@@ -176,7 +174,8 @@ namespace Airways.Controllers
                 emailContent.AppendLine("<table border='1' cellpadding='5' style='border-collapse: collapse;'>");
                 emailContent.AppendLine("<tr><th>Flight</th><th>Date</th><th>From</th><th>To</th><th>Class</th><th>Seat</th><th>Meal</th><th>Price</th></tr>");
 
-                // Process each cart item
+                // convert to database
+
                 foreach (var item in dynamicItems)
                 {
                     int flightId = item.GetProperty("FlightId").GetInt32();
@@ -187,7 +186,7 @@ namespace Airways.Controllers
                     string departureCity = item.GetProperty("DepartureCity").GetString();
                     string arrivalCity = item.GetProperty("ArrivalCity").GetString();
 
-                    // Create booking in the database
+                    
                     var booking = await _bookingService.CreateBookingAsync(
                         profile.ProfileId,
                         flightId,
@@ -199,15 +198,17 @@ namespace Airways.Controllers
 
                     totalAmount += totalPrice;
 
-                    // Get the arrival city ID to track in customer preferences
+                    // register in customerpref
+
                     var arrivalCityObj = await _cityService.GetCityByNameAsync(arrivalCity);
                     if (arrivalCityObj != null)
                     {
-                        // Track the visit in customer preferences
+                        
                         await _customerPrefService.TrackCityVisitAsync(profile.ProfileId, arrivalCityObj.CityId);
                     }
 
-                    // Get meal name for email
+                    // meal for email
+
                     string mealName = "No meal selected";
                     if (mealId.HasValue)
                     {
@@ -218,7 +219,8 @@ namespace Airways.Controllers
                         }
                     }
 
-                    // Create booking details for the view model
+                    // viewmodel
+
                     var bookingDetail = new BookingDetailsVM
                     {
                         BookingId = booking.BookingId,
@@ -235,7 +237,8 @@ namespace Airways.Controllers
 
                     bookings.Add(bookingDetail);
 
-                    // Add to email content
+                    // add to mail
+
                     emailContent.AppendLine($"<tr><td>{flightId}</td><td>{travelDate.ToString("yyyy-MM-dd")}</td><td>{departureCity}</td><td>{arrivalCity}</td><td>{travelClass}</td><td>{booking.SeatNumber}</td><td>{mealName}</td><td>${totalPrice.ToString("0.00")}</td></tr>");
                 }
 
@@ -244,18 +247,21 @@ namespace Airways.Controllers
                 emailContent.AppendLine("<p>We look forward to seeing you on board!</p>");
                 emailContent.AppendLine("<p>Best regards,<br>Michael Scott Airways</p>");
 
-                // Send email to the user
+                // send mail
+
                 await _emailSend.SendEmailAsync(
                     profile.Email,
                     "Your Booking Confirmation - Michael Scott Airways",
                     emailContent.ToString()
                 );
 
-                // Clear the cart
+                // clear basket
+
                 TempData.Remove("SimpleCart");
                 TempData["CartItemCount"] = 0;
 
-                // Create confirmation view model
+                // confirmation viewmodel
+
                 var confirmationViewModel = new BookingConfirmationVM
                 {
                     BookingCount = bookings.Count,
@@ -264,7 +270,7 @@ namespace Airways.Controllers
                     TotalAmount = totalAmount
                 };
 
-                // Store it in TempData to be accessed by the confirmation page
+                
                 TempData["BookingConfirmation"] = JsonSerializer.Serialize(confirmationViewModel);
 
                 return RedirectToAction("BookingConfirmation");

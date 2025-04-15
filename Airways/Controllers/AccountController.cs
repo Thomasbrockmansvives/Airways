@@ -1,14 +1,9 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Airways.Services.Interfaces;
 using Airways.Models;
 using Airways.Models.ViewModels;
 using Airways.Util.Mail.Interfaces;
-using System.Security.Claims;
-using Humanizer;
-using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace Airways.WebUI.Controllers
 {

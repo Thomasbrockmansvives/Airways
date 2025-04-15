@@ -4,9 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using System.Data;
-using Airways.Infrastructure;
 using System.Text.Json;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 
 [Authorize]
@@ -38,6 +37,8 @@ public class SearchController : Controller
 
     public async Task<IActionResult> Search()
     {
+        // viewmodel for search form
+
         var viewModel = new FlightSearchVM
         {
             TravelDate = DateTime.Now.AddDays(3),
@@ -50,7 +51,8 @@ public class SearchController : Controller
     [HttpPost]
     public async Task<IActionResult> Search(FlightSearchVM viewmodel)
     {
-        // Get cities again to reset dropdown
+        // Get cities to reset dropdown
+
         viewmodel.AvailableCities = await _cityService.GetAllCitiesAsync();
 
         if (!ModelState.IsValid)
@@ -81,7 +83,7 @@ public class SearchController : Controller
             
         };
 
-        // Fetch flights for line 1
+        // Get flights for line 1
         resultViewModel.FlightNumber1 = connection.FlightNumber1;
         resultViewModel.Line1DepartureCity = connection.FlightNumber1Navigation.Departure.Name;
         resultViewModel.Line1ArrivalCity = connection.FlightNumber1Navigation.Arrival.Name;
@@ -92,7 +94,7 @@ public class SearchController : Controller
         resultViewModel.Line1Flight.PriceBusiness = AdjustPriceForSeasonalRates(resultViewModel.Line1ArrivalCity, resultViewModel.Line1Flight.Date, resultViewModel.Line1Flight.PriceBusiness);
 
 
-        // If there's a second line, fetch flights for it
+        // If there's a second line, get flights for it
         if (connection.Lines >= 2 && connection.FlightNumber2.HasValue)
         {
             resultViewModel.FlightNumber2 = connection.FlightNumber2;
@@ -105,7 +107,7 @@ public class SearchController : Controller
             resultViewModel.Line2Flight.PriceBusiness = AdjustPriceForSeasonalRates(resultViewModel.Line2ArrivalCity, resultViewModel.Line2Flight.Date, resultViewModel.Line2Flight.PriceBusiness);
         }
 
-        // If there's a third line, fetch flights for it
+        // If there's a third line, get flights for it
         if (connection.Lines >= 3 && connection.FlightNumber3.HasValue)
         {
             resultViewModel.FlightNumber3 = connection.FlightNumber3;
@@ -139,14 +141,14 @@ public class SearchController : Controller
     [HttpGet]
     public async Task<IActionResult> CustomizeFlight(int flightId, string travelDate, string priceEconomy, string priceBusiness, int flightNumber)
     {
-        // Parse the date from string format
+        // date from string format
         DateOnly parsedDate;
         if (!DateOnly.TryParse(travelDate, out parsedDate))
         {
             return BadRequest("Invalid date format");
         }
 
-        // Parse decimal values using invariant culture
+        // decimal values using invariant culture
         decimal parsedPriceEconomy;
         decimal parsedPriceBusiness;
 
@@ -172,6 +174,8 @@ public class SearchController : Controller
         {
             return NotFound();
         }
+
+        // seats availability
 
         var availableEconomySeats = await _flightService.IsEconomyAvailableByFlightAsync(flightId);
         var availableBusinessSeats = await _flightService.IsBusinessAvailableByFlightAsync(flightId);
@@ -207,12 +211,12 @@ public class SearchController : Controller
     public IActionResult AddToCartSimple(int flightId, string travelDate, string departureCity, string arrivalCity,
     string departureTime, string arrivalTime, string travelClass, int? mealId, decimal economyPrice, decimal businessPrice)
     {
-        // Bereken de prijzen op basis van de geselecteerde opties
+        // price calculation
         decimal classPrice = travelClass == "Economy" ? economyPrice : businessPrice;
         decimal mealPrice = mealId.HasValue ? 35.00m : 0;
         decimal totalPrice = classPrice + mealPrice;
 
-        // Haal de maaltijd naam op als er een maaltijd is geselecteerd
+        // Get meal if applicable
         string mealName = "";
         if (mealId.HasValue)
         {
@@ -220,7 +224,8 @@ public class SearchController : Controller
             mealName = meal?.Name ?? "";
         }
 
-        // Sla alles op in ViewBag voor de bevestigingsweergave
+        // Save in viewbag
+
         ViewBag.FlightId = flightId;
         ViewBag.TravelDate = travelDate;
         ViewBag.DepartureCity = departureCity;
@@ -233,7 +238,6 @@ public class SearchController : Controller
         ViewBag.TotalPrice = totalPrice;
         ViewBag.ClassPrice = classPrice;
 
-        // Sla op in de cart
         List<dynamic> cartItems;
 
         if (TempData["SimpleCart"] != null)
@@ -245,7 +249,7 @@ public class SearchController : Controller
             cartItems = new List<dynamic>();
         }
 
-        // Voeg toe aan cart
+        // add to cart
         cartItems.Add(new
         {
             FlightId = flightId,
@@ -265,7 +269,7 @@ public class SearchController : Controller
         TempData["SimpleCart"] = JsonSerializer.Serialize(cartItems);
         TempData["CartItemCount"] = cartItems.Count;
 
-        // Toon de bevestigingsview
+        // show confirmation
         return PartialView("_AddToCartConfirmation");
     }
 
