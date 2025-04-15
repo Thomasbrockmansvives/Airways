@@ -1,5 +1,4 @@
-﻿
-using Airways.Domain.EntitiesDB;
+﻿using Airways.Domain.EntitiesDB;
 using System;
 
 namespace Airways.ViewModels

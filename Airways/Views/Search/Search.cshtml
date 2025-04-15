@@ -10,7 +10,7 @@
             <div class="alert alert-info d-flex align-items-center" role="alert">
                 <i class="bi bi-info-circle me-3 fs-4"></i>
                 <div>
-                    <strong>STEP 1: </strong>Choose your departure, destination and search period
+                    <strong>STEP 1: </strong>Choose your departure, destination and travel day
                 </div>
             </div>
             <div id="search-form-container">
@@ -32,7 +32,7 @@
     </div>
 </div>
 
-<script>
+<script>// called from partial _searchResults.cshtml
     function customizeFlight(flightId, travelDate, priceEconomy, priceBusiness, flightNumber) {
         console.log("Customizing flight:", flightId, travelDate, priceEconomy, priceBusiness, flightNumber);
 

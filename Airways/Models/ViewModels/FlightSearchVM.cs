@@ -17,8 +17,8 @@ namespace Airways.ViewModels
         [Display(Name = "Arrival City")]
         public int ArrivalCityId { get; set; }
 
-        [Required(ErrorMessage = "Please select a start date")]
-        [Display(Name = "Start Date")]
+        [Required(ErrorMessage = "Please select a travel date")]
+        [Display(Name = "Travel Date")]
         [DataType(DataType.Date)]
         public DateTime TravelDate { get; set; }
 

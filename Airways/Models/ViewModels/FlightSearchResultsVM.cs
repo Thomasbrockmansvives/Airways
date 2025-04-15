@@ -1,5 +1,4 @@
-﻿// FlightSearchResultsVM.cs (in Airways.ViewModels folder)
-using Airways.Domain.EntitiesDB;
+﻿using Airways.Domain.EntitiesDB;
 using System;
 using System.Collections.Generic;
 
