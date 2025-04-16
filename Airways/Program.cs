@@ -49,7 +49,7 @@ builder.Services.AddSingleton(emailSettings);
 builder.Services.AddSingleton<Airways.Util.Mail.Interfaces.IEmailSend, Airways.Util.Mail.EmailSend>();
 
 // RapidAPI settings
-var rapidApiDestinationSettings = new Airways.Domain.RapidApiDestinationSettings();
+var rapidApiDestinationSettings = new Airways.Domain.RapidApiSettings();
 builder.Configuration.GetSection("RapidApiDestinationSettings").Bind(rapidApiDestinationSettings);
 builder.Services.AddSingleton(rapidApiDestinationSettings);
 

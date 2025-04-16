@@ -14,18 +14,18 @@ namespace Airways.Repository
     public class RapidApiDestinationDAO : IRapidApiDestinationDAO
     {
         private readonly HttpClient _httpClient;
-        private readonly RapidApiDestinationSettings _apiDestinationSettings;
+        private readonly RapidApiSettings _apiSettings;
         private readonly ILogger<RapidApiDestinationDAO> _logger;
 
-        public RapidApiDestinationDAO(HttpClient httpClient, RapidApiDestinationSettings apiDestinationSettings, ILogger<RapidApiDestinationDAO> logger)
+        public RapidApiDestinationDAO(HttpClient httpClient, RapidApiSettings apiSettings, ILogger<RapidApiDestinationDAO> logger)
         {
             _httpClient = httpClient;
-            _apiDestinationSettings = apiDestinationSettings;
+            _apiSettings = apiSettings;
             _logger = logger;
 
             // Set up HTTP client headers
-            _httpClient.DefaultRequestHeaders.Add("X-RapidAPI-Key", _apiDestinationSettings.ApiKey);
-            _httpClient.DefaultRequestHeaders.Add("X-RapidAPI-Host", _apiDestinationSettings.Host);
+            _httpClient.DefaultRequestHeaders.Add("X-RapidAPI-Key", _apiSettings.ApiKey);
+            _httpClient.DefaultRequestHeaders.Add("X-RapidAPI-Host", _apiSettings.Host);
         }
 
         public async Task<List<RapidApiDestination>> SearchRapidApiDestinationsByQueryAsync(string cityname)
@@ -34,7 +34,7 @@ namespace Airways.Repository
             {
                 // Encode the query parameter
                 var encodedQuery = HttpUtility.UrlEncode(cityname);
-                var requestUrl = $"{_apiDestinationSettings.BaseUrl}?query={encodedQuery}";
+                var requestUrl = $"{_apiSettings.BaseUrl}?query={encodedQuery}";
 
                 _logger.LogInformation($"Sending request to: {requestUrl}");
 
