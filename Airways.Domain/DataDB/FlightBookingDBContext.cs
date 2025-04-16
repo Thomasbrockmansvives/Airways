@@ -73,6 +73,9 @@ public partial class FlightBookingDBContext : DbContext
                 .HasColumnName("CityID");
             entity.Property(e => e.Country).HasMaxLength(100);
             entity.Property(e => e.Name).HasMaxLength(100);
+            entity.Property(e => e.DestId)
+                .HasColumnName("Dest_Id")
+                .HasColumnType("numeric(18,0)");
         });
 
         modelBuilder.Entity<Connection>(entity =>

@@ -11,6 +11,8 @@ public partial class City
 
     public string Country { get; set; } = null!;
 
+    public decimal? DestId { get; set; }
+
     public virtual ICollection<Connection> ConnectionArrivals { get; set; } = new List<Connection>();
 
     public virtual ICollection<Connection> ConnectionDepartures { get; set; } = new List<Connection>();

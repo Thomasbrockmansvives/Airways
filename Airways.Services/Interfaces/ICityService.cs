@@ -11,5 +11,6 @@ namespace Airways.Services.Interfaces
         
         Task<City> GetCityByIdAsync(int id);
         Task<City> GetCityByNameAsync(string name);
+        Task<decimal?> GetDestIdByCityNameAsync(string cityName);
     }
 }

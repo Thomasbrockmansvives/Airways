@@ -32,5 +32,13 @@ namespace Airways.Repository
             return await _context.Cities
                 .FirstOrDefaultAsync(c => c.Name.ToLower() == name.ToLower());
         }
+
+        public async Task<decimal?> GetDestIdByCityNameAsync(string cityName)
+        {
+            var city = await _context.Cities
+                .FirstOrDefaultAsync(c => c.Name.ToLower() == cityName.ToLower());
+
+            return city?.DestId;
+        }
     }
 }

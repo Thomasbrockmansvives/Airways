@@ -29,5 +29,11 @@ namespace Airways.Services
         {
             return await _cityDAO.GetCityByNameAsync(name);
         }
+
+        
+        public async Task<decimal?> GetDestIdByCityNameAsync(string cityName)
+        {
+            return await _cityDAO.GetDestIdByCityNameAsync(cityName);
+        }
     }
 }

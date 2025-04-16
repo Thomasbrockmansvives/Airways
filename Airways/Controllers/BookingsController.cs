@@ -20,22 +20,21 @@ namespace Airways.Controllers
         private readonly ICustomerProfileService _customerProfileService;
         private readonly ICityService _cityService;
         private readonly ILogger<BookingsController> _logger;
-        private readonly IRapidApiDestinationService _rapidApiDestinationService;
+        
 
         public BookingsController(
             IBookingService bookingService,
             UserManager<IdentityUser> userManager,
             ICustomerProfileService customerProfileService,
             ICityService cityService,
-            ILogger<BookingsController> logger,
-            IRapidApiDestinationService rapidApiDestinationService)
+            ILogger<BookingsController> logger)
         {
             _bookingService = bookingService;
             _userManager = userManager;
             _customerProfileService = customerProfileService;
             _cityService = cityService;
             _logger = logger;
-            _rapidApiDestinationService = rapidApiDestinationService;
+            
         }
 
         public async Task<IActionResult> Index()
@@ -234,81 +233,6 @@ namespace Airways.Controllers
                 .ToList();
         }
 
-        public async Task<IActionResult> FindRapidApiDestinations(string city)
-        {
-            if (string.IsNullOrEmpty(city))
-            {
-                return RedirectToAction("Index");
-            }
-
-            try
-            {
-                _logger.LogInformation($"Searching for destination in city: {city}");
-
-                // Get destinations from the API
-                var destinations = await _rapidApiDestinationService.SearchRapidApiDestinationsByQueryAsync(city);
-
-                if (destinations != null)
-{
-    _logger.LogInformation($"Found {destinations.Count} destinations");
-    foreach (var d in destinations)
-    {
-        _logger.LogInformation($"Destination: DestId={d.DestId}, CityName={d.CityName}");
-    }
-}
-else
-{
-    _logger.LogWarning("Destinations is null");
-}
-
-                // Create a ViewModel
-                var destinationViewModel = new RapidApiDestinationVM
-                {
-                    CityName = city,
-                    DestId = "Not found" // Default value
-                };
-
-                // If a destination was found, populate the DestId
-                if (destinations != null && destinations.Any())
-                {
-                    var destination = destinations.First();
-                    _logger.LogInformation($"Found destination: DestId={destination.DestId}, CityName={destination.CityName}");
-                    destinationViewModel.DestId = destination.DestId;
-                }
-                else
-                {
-                    _logger.LogWarning($"No destinations found for city: {city}");
-                }
-
-                // Get the current user's bookings to redisplay in the view
-                var user = await _userManager.GetUserAsync(User);
-                if (user == null)
-                {
-                    return RedirectToAction("Login", "Account");
-                }
-
-                var profile = await _customerProfileService.GetCustomerProfileByUserIdAsync(user.Id);
-                if (profile == null)
-                {
-                    return RedirectToAction("Index", "Home");
-                }
-
-                var bookings = await _bookingService.GetBookingsByCustomerIdAsync(profile.ProfileId);
-                var bookingViewModels = MapBookingsToViewModel(bookings);
-
-                // Store the destination data in ViewData
-                ViewData["DestinationData"] = destinationViewModel;
-                ViewData["ProfileId"] = profile.ProfileId;
-
-                // Return the Index view with the bookings as the model
-                return View("Index", bookingViewModels);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Error finding destination for city: {city}");
-                TempData["ErrorMessage"] = "Failed to retrieve destination information. Please try again.";
-                return RedirectToAction("Index");
-            }
-        }
+       
     }
 }
