@@ -64,21 +64,22 @@
                                     <td><span class="badge @GetStatusBadgeClass(booking.Status)">@booking.Status</span></td>
                                     <td>€@booking.TotalPrice.ToString("0.00")</td>
                                     <td>
+                                        
+                                        @if (booking.IsInFuture && booking.SeatNumber > 0)
+                                        {
+                                            <a asp-controller="Bookings"
+                                               asp-action="FindRapidApiDestinations"
+                                               asp-route-city="@booking.ArrivalCity"
+                                               class="btn btn-sm btn-dark mt-1">
+                                                Find Hotels
+                                            </a>
+                                        }
                                         @if (booking.CanCancel)
                                         {
                                             <form asp-action="CancelBooking" method="post" onsubmit="return confirm('Are you sure you want to cancel this booking?');">
                                                 <input type="hidden" name="bookingId" value="@booking.BookingId" />
                                                 <button type="submit" class="btn btn-sm btn-danger">Cancel</button>
                                             </form>
-                                        }
-                                        @if (booking.IsInFuture && booking.SeatNumber > 0)
-                                        {
-                                            <a asp-controller="Bookings"
-                                               asp-action="FindRapidApiDestinations"
-                                               asp-route-city="@booking.ArrivalCity"
-                                               class="btn btn-sm btn-info mt-1">
-                                                Find Hotels
-                                            </a>
                                         }
                                     </td>
                                 </tr>

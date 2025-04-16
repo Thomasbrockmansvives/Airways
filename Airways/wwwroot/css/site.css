@@ -179,27 +179,28 @@ header {
 
 
 .small-table {
-    font-size: 0.85rem;
+    font-size: 0.70rem;
 }
 
 .small-table th {
-        font-size: 0.85rem;
-        font-weight: 600;
+        font-size: 0.70rem;
+        font-weight: 500;
     }
 
 .small-table .small-header th {
-        font-size: 0.85rem;
+        font-size: 0.70rem;
     }
 
 .small-table .small-text td {
-        font-size: 0.85rem;
+        font-size: 0.70rem;
     }
 
 .small-table .btn {
-        font-size: 0.75rem;
-        padding: 0.2rem 0.5rem;
+        font-size: 0.65rem;
+        padding: 0.1rem 0.3rem;
+        margin-bottom: 5px;
     }
 
 .small-table .badge {
-        font-size: 0.75rem;
+        font-size: 0.65rem;
     }
