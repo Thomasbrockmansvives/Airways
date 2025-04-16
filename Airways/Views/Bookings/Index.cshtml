@@ -65,15 +65,7 @@
                                     <td>€@booking.TotalPrice.ToString("0.00")</td>
                                     <td>
                                         
-                                        @if (booking.IsInFuture && booking.SeatNumber > 0)
-                                        {
-                                            <a asp-controller="Bookings"
-                                               asp-action="FindRapidApiDestinations"
-                                               asp-route-city="@booking.ArrivalCity"
-                                               class="btn btn-sm btn-dark mt-1">
-                                                Find Hotels
-                                            </a>
-                                        }
+                                        
                                         @if (booking.CanCancel)
                                         {
                                             <form asp-action="CancelBooking" method="post" onsubmit="return confirm('Are you sure you want to cancel this booking?');">
@@ -89,12 +81,7 @@
                 </div>
             </div>
 
-            <div class="col-md-4" id="hotels-container">
-                @if (ViewData["DestinationData"] != null)
-                {
-                    @await Html.PartialAsync("_RapidApiDestinationResults", (Airways.ViewModels.RapidApiDestinationVM)ViewData["DestinationData"])
-                }
-            </div>
+            
         </div>
     }
 </div>
@@ -113,19 +100,4 @@
             default: return "bg-dark";
         }
     }
-}
-
-@section Scripts {
-    <script>
-        function findHotels(city, date) {
-            fetch(`/Bookings/LookForHotels?city=${encodeURIComponent(city)}&date=${encodeURIComponent(date)}`)
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById('hotels-container').innerHTML = data;
-                })
-                .catch(error => {
-                    console.error('Error fetching hotel data:', error);
-                });
-        }
-    </script>
 }
