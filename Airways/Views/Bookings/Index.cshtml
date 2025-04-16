@@ -1,4 +1,6 @@
 ﻿@model List<Airways.ViewModels.BookingVM>
+
+
 @{
     ViewData["Title"] = "My Bookings";
 }
@@ -71,10 +73,12 @@
                                         }
                                         @if (booking.IsInFuture && booking.SeatNumber > 0)
                                         {
-                                            <button type="button" class="btn btn-sm btn-info mt-1"
-                                                    onclick="findHotels('@booking.ArrivalCity', '@booking.FlightDate.ToString("yyyy-MM-dd")')">
+                                            <a asp-controller="Bookings"
+                                               asp-action="FindRapidApiDestinations"
+                                               asp-route-city="@booking.ArrivalCity"
+                                               class="btn btn-sm btn-info mt-1">
                                                 Find Hotels
-                                            </button>
+                                            </a>
                                         }
                                     </td>
                                 </tr>
@@ -83,8 +87,12 @@
                     </table>
                 </div>
             </div>
+
             <div class="col-md-4" id="hotels-container">
-                <!-- Hotel results will be loaded here -->
+                @if (ViewData["DestinationData"] != null)
+                {
+                    @await Html.PartialAsync("_RapidApiDestinationResults", (Airways.ViewModels.RapidApiDestinationVM)ViewData["DestinationData"])
+                }
             </div>
         </div>
     }

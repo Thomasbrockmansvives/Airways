@@ -37,8 +37,10 @@ builder.Services.AddScoped<IBookingDAO, BookingDAO>();
 builder.Services.AddScoped<ICustomerPrefDAO, CustomerPrefDAO>();
 builder.Services.AddScoped<IBookingService, BookingService>();
 builder.Services.AddScoped<ICustomerPrefService, CustomerPrefService>();
+builder.Services.AddScoped<IRapidApiDestinationDAO, RapidApiDestinationDAO>();
+builder.Services.AddScoped<IRapidApiDestinationService, RapidApiDestinationService>();
 
-// Add EmailSettings
+// EmailSettings
 var emailSettings = new Airways.Util.Mail.EmailSettings();
 builder.Configuration.GetSection("EmailSettings").Bind(emailSettings);
 
@@ -46,9 +48,15 @@ builder.Services.AddSingleton(emailSettings);
 
 builder.Services.AddSingleton<Airways.Util.Mail.Interfaces.IEmailSend, Airways.Util.Mail.EmailSend>();
 
+// RapidAPI settings
+var rapidApiDestinationSettings = new Airways.Domain.RapidApiDestinationSettings();
+builder.Configuration.GetSection("RapidApiDestinationSettings").Bind(rapidApiDestinationSettings);
+builder.Services.AddSingleton(rapidApiDestinationSettings);
 
+// Register HttpClient for API calls
+builder.Services.AddHttpClient();
 
-//DbContext
+// DbContext
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
