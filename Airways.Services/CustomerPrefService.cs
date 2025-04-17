@@ -30,5 +30,11 @@ namespace Airways.Services
                 return await _customerPrefDAO.CreateCustomerPrefAsync(profileId, cityId, 1);
             }
         }
+
+        // Add this method to the CustomerPrefService.cs file
+        public async Task<IEnumerable<CustomerPref>> GetCustomerPrefsByProfileIdAsync(int profileId)
+        {
+            return await _customerPrefDAO.GetCustomerPrefsByProfileIdAsync(profileId);
+        }
     }
 }

@@ -9,5 +9,8 @@ namespace Airways.Repository.Interfaces
         Task<CustomerPref> CreateCustomerPrefAsync(int profileId, int cityId, int visitCount);
         Task<CustomerPref> IncrementVisitCountAsync(int prefId);
         Task<int> GenerateUniquePrefIdAsync();
+
+        // Add this method to the ICustomerPrefDAO.cs file
+        Task<IEnumerable<CustomerPref>> GetCustomerPrefsByProfileIdAsync(int profileId);
     }
 }

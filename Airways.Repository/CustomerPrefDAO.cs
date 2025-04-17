@@ -55,5 +55,13 @@ namespace Airways.Repository
             int maxId = await _context.CustomerPrefs.MaxAsync(cp => (int?)cp.PrefId) ?? 0;
             return maxId + 1; //sequence
         }
+
+        // Add this method to the CustomerPrefDAO.cs file
+        public async Task<IEnumerable<CustomerPref>> GetCustomerPrefsByProfileIdAsync(int profileId)
+        {
+            return await _context.CustomerPrefs
+                .Where(cp => cp.ProfileId == profileId)
+                .ToListAsync();
+        }
     }
 }

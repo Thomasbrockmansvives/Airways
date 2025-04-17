@@ -1,0 +1,24 @@
+﻿@model Airways.ViewModels.BannerVM
+<div class="banner" style="height: 100px; background: linear-gradient(to right, #FDB813, #e53935); width: 100%; display: flex; align-items: center; justify-content: center; color: white; cursor: pointer;" onclick="location.href='@Url.Action("Search", "Search")'">
+    <div class="container d-flex align-items-center justify-content-between">
+        
+        @if (Model != null)
+        {
+            <h4 class="mb-0">
+                @if (Model.IsLoggedIn && Model.HasPreferredCity)
+                {
+                    <text>We know you love <strong>@Model.PreferredCityName</strong> ! Let us take you there once more, starting at only <strong>€@Model.FlightPrice</strong></text>
+                }
+                else
+                {
+                    <text>Fly with us to <strong>Tokyo, New York, London</strong> and other worldly cities starting at only <strong>€79,99</strong></text>
+                }
+            </h4>
+        }
+        else
+        {
+            <h4 class="mb-0">Flight with us to Tokyo, New York, London and other worldly cities starting at only €79,99 (meals excluded)</h4>
+        }
+        <img src="~/img/promo.jpg" alt="Airplane" style="height: 70px; border-radius: 5px; margin-left: 20px;" />
+    </div>
+</div>
