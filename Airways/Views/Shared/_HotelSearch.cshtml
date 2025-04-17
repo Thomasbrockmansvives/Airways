@@ -1,0 +1,37 @@
+﻿<!-- _HotelSearch.cshtml (place in Views/Bookings folder) -->
+@model Airways.ViewModels.HotelSearchVM
+
+<div class="card">
+    <div class="card-header bg-primary text-white">
+        <h5>Hotel Search Information</h5>
+    </div>
+    <div class="card-body">
+        <h6>Hotel search for @Model.ArrivalCity</h6>
+
+        <div class="mb-3">
+            <strong>Destination ID:</strong> @Model.DestId
+            <small class="text-muted d-block">Type: @Model.DestIdType</small>
+        </div>
+
+        <div class="mb-3">
+            <strong>Check-in Date:</strong> @Model.CheckinDate
+        </div>
+
+        <div class="mb-3">
+            <strong>Check-out Date:</strong> @Model.CheckoutDate
+        </div>
+
+        <hr>
+
+        <h6>Search Parameters</h6>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item"><strong>Currency:</strong> @Model.Currency</li>
+            <li class="list-group-item"><strong>Adults:</strong> @Model.AdultsNumber</li>
+            <li class="list-group-item"><strong>Units:</strong> @Model.Units</li>
+            <li class="list-group-item"><strong>Locale:</strong> @Model.Locale</li>
+            <li class="list-group-item"><strong>Destination Type:</strong> @Model.DestType</li>
+            <li class="list-group-item"><strong>Order By:</strong> @Model.OrderBy</li>
+            <li class="list-group-item"><strong>Room Number:</strong> @Model.RoomNumber</li>
+        </ul>
+    </div>
+</div>

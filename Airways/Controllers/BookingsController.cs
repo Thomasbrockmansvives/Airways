@@ -4,7 +4,7 @@ using Airways.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging; // Add this using statement
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +20,7 @@ namespace Airways.Controllers
         private readonly ICustomerProfileService _customerProfileService;
         private readonly ICityService _cityService;
         private readonly ILogger<BookingsController> _logger;
-        
+
 
         public BookingsController(
             IBookingService bookingService,
@@ -34,7 +34,6 @@ namespace Airways.Controllers
             _customerProfileService = customerProfileService;
             _cityService = cityService;
             _logger = logger;
-            
         }
 
         public async Task<IActionResult> Index()
@@ -75,16 +74,12 @@ namespace Airways.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error retrieving bookings");
-                // You could add a temporary message for debugging
                 ViewBag.ErrorMessage = ex.ToString();
                 return View(new List<BookingVM>());
             }
         }
 
-        // The rest of your controller methods remain the same
-        // ...
-
-[HttpPost]
+        [HttpPost]
         public async Task<IActionResult> CancelBooking(int bookingId)
         {
             var user = await _userManager.GetUserAsync(User);
@@ -135,6 +130,42 @@ namespace Airways.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpGet]
+        public async Task<IActionResult> LookForHotels(string city, string date)
+        {
+            try
+            {
+                // Parse the date string
+                DateOnly flightDate;
+                if (!DateOnly.TryParse(date, out flightDate))
+                {
+                    return PartialView("_Error", "Invalid date format");
+                }
+
+                // Get the destination ID for the city
+                var destId = await _cityService.GetDestIdByCityNameAsync(city);
+
+                // Calculate checkout date (3 days after check-in)
+                var checkoutDate = flightDate.AddDays(3);
+
+                // Create the view model
+                var viewModel = new HotelSearchVM
+                {
+                    ArrivalCity = city,
+                    DestId = destId,
+                    DestIdType = destId.HasValue ? "numeric" : "unknown",
+                    CheckinDate = flightDate.ToString("yyyy-MM-dd"),
+                    CheckoutDate = checkoutDate.ToString("yyyy-MM-dd")
+                };
+
+                return PartialView("_HotelSearch", viewModel);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error finding hotels");
+                return PartialView("_Error", "Unable to find hotels. Please try again.");
+            }
+        }
 
         private List<BookingVM> MapBookingsToViewModel(IEnumerable<Booking> bookings)
         {
@@ -232,7 +263,5 @@ namespace Airways.Controllers
                 .ThenBy(b => b.DepartureTime)
                 .ToList();
         }
-
-       
     }
 }
