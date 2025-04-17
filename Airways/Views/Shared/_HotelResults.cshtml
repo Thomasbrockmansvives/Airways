@@ -1,0 +1,66 @@
+﻿@model Airways.ViewModels.HotelsVM
+
+<div class="card">
+    <div class="card-header bg-dark text-white">
+        <h5 class="mb-0">Hotels in @Model.City</h5>
+        <small>@Model.CheckinDate to @Model.CheckoutDate (3-night stay)</small>
+    </div>
+    <div class="card-body">
+
+        @foreach (var hotel in Model.Hotels)
+        {
+            <div class="card mb-3 shadow-sm">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        @if (!string.IsNullOrEmpty(hotel.MaxPhotoUrl))
+                        {
+                            <img src="@hotel.MaxPhotoUrl" class="img-fluid rounded-start"
+                                 alt="@hotel.HotelName"
+                                 style="width: 100%; height: 140px; object-fit: cover;">
+                        }
+                        else if (!string.IsNullOrEmpty(hotel.MainPhotoUrl))
+                        {
+                            <img src="@hotel.MainPhotoUrl" class="img-fluid rounded-start"
+                                 alt="@hotel.HotelName"
+                                 style="width: 100%; height: 140px; object-fit: cover;">
+                        }
+                        else
+                        {
+                            <div class="bg-light d-flex align-items-center justify-content-center"
+                                 style="height: 140px;">
+                                <span class="text-muted small">No image available</span>
+                            </div>
+                        }
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body py-2">
+                            <h6 class="card-title mb-1">@(string.IsNullOrEmpty(hotel.HotelName) ? "Unnamed Hotel" : hotel.HotelName)</h6>
+
+                            @if (!string.IsNullOrEmpty(hotel.ReviewScoreWord))
+                            {
+                                <p class="card-text mb-1">
+                                    <span class="badge bg-secondary">@hotel.ReviewScoreWord</span>
+                                </p>
+                            }
+
+                            <p class="card-text mb-2">
+                                <strong>€@hotel.PriceBreakdown.PriceString</strong> <small class="text-muted">per night</small>
+                            </p>
+
+                            @if (!string.IsNullOrEmpty(hotel.Url))
+                            {
+                                <a href="@hotel.Url" target="_blank" class="btn btn-sm btn-dark">
+                                    <i class="bi bi-box-arrow-up-right me-1"></i> View on Booking.com
+                                </a>
+                            }
+                            else
+                            {
+                                <span class="text-muted small">Booking link not available</span>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

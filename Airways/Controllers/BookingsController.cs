@@ -1,4 +1,5 @@
 ﻿using Airways.Domain.EntitiesDB;
+using Airways.Models.API;
 using Airways.Services.Interfaces;
 using Airways.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -9,6 +10,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Net.Http;
+using System.Text.Json;
 
 namespace Airways.Controllers
 {
@@ -144,27 +147,168 @@ namespace Airways.Controllers
 
                 // Get the destination ID for the city
                 var destId = await _cityService.GetDestIdByCityNameAsync(city);
+                if (!destId.HasValue)
+                {
+                    return PartialView("_Error", $"Unable to find destination ID for {city}");
+                }
+
+                // Format destId
+                string formattedDestId = ((int)destId.Value).ToString();
 
                 // Calculate checkout date (3 days after check-in)
-                var checkoutDate = flightDate.AddDays(3);
+                var checkinDate = flightDate.ToString("yyyy-MM-dd");
+                var checkoutDate = flightDate.AddDays(3).ToString("yyyy-MM-dd"); // Changed to 3 days
 
-                // Create the view model
-                var viewModel = new HotelSearchVM
+                // Call booking.com API
+                var client = new HttpClient();
+                var request = new HttpRequestMessage
                 {
-                    ArrivalCity = city,
-                    DestId = destId,
-                    DestIdType = destId.HasValue ? "numeric" : "unknown",
-                    CheckinDate = flightDate.ToString("yyyy-MM-dd"),
-                    CheckoutDate = checkoutDate.ToString("yyyy-MM-dd")
+                    Method = HttpMethod.Get,
+                    RequestUri = new Uri($"https://booking-com.p.rapidapi.com/v1/hotels/search?filter_by_currency=EUR&checkout_date={checkoutDate}&checkin_date={checkinDate}&adults_number=1&units=metric&dest_id={formattedDestId}&locale=en-gb&dest_type=city&order_by=popularity&room_number=1"),
+                    Headers =
+            {
+                { "x-rapidapi-key", "2baa7d1a53mshc3264084c2ffcddp1d61bcjsnc5319bcb3612" },
+                { "x-rapidapi-host", "booking-com.p.rapidapi.com" },
+            },
                 };
 
-                return PartialView("_HotelSearch", viewModel);
+                using (var response = await client.SendAsync(request))
+                {
+                    response.EnsureSuccessStatusCode();
+                    var body = await response.Content.ReadAsStringAsync();
+
+                    // Manual extraction approach to bypass the deserialization issues
+                    try
+                    {
+                        // Use JsonDocument for low-level access to the JSON
+                        using (JsonDocument doc = JsonDocument.Parse(body))
+                        {
+                            var root = doc.RootElement;
+
+                            // Get the total hotels count
+                            int totalHotels = 0;
+                            if (root.TryGetProperty("primary_count", out var countElement))
+                            {
+                                totalHotels = countElement.GetInt32();
+                            }
+
+                            // Get the results array
+                            if (!root.TryGetProperty("result", out var resultsElement) || resultsElement.ValueKind != JsonValueKind.Array)
+                            {
+                                return PartialView("_Error", "No hotels found in response");
+                            }
+
+                            var hotelsList = new List<HotelResult>();
+
+                            // Get the first 3 hotels
+                            int count = 0;
+                            foreach (var hotelElement in resultsElement.EnumerateArray())
+                            {
+                                if (count >= 3) break;
+
+                                // Try hotel_name_trans first, fall back to hotel_name if needed
+                                string hotelName = GetStringProperty(hotelElement, "hotel_name_trans");
+                                if (string.IsNullOrEmpty(hotelName))
+                                {
+                                    hotelName = GetStringProperty(hotelElement, "hotel_name");
+                                }
+
+                                var hotel = new HotelResult
+                                {
+                                    HotelName = hotelName,
+                                    ReviewScoreWord = GetStringProperty(hotelElement, "review_score_word"),
+                                    MainPhotoUrl = GetStringProperty(hotelElement, "main_photo_url"),
+                                    // Try to get max_photo_url for higher quality images
+                                    MaxPhotoUrl = GetStringProperty(hotelElement, "max_photo_url"),
+                                    Url = GetStringProperty(hotelElement, "url"),
+                                    PriceBreakdown = new PriceBreakdown
+                                    {
+                                        PriceString = GetPriceString(hotelElement),
+                                        Currency = "EUR"
+                                    }
+                                };
+
+                                hotelsList.Add(hotel);
+                                count++;
+                            }
+
+                            // Create view model
+                            var viewModel = new HotelsVM
+                            {
+                                City = city,
+                                CheckinDate = checkinDate,
+                                CheckoutDate = checkoutDate,
+                                TotalHotels = totalHotels,
+                                Hotels = hotelsList
+                            };
+
+                            return PartialView("_HotelResults", viewModel);
+                        }
+                    }
+                    catch (Exception jsonEx)
+                    {
+                        _logger.LogError(jsonEx, "Error processing JSON");
+
+                        // Return the debug view with more context
+                        return PartialView("~/Views/Shared/_HotelDebug", new Dictionary<string, string>
+                {
+                    { "City", city },
+                    { "CheckinDate", checkinDate },
+                    { "CheckoutDate", checkoutDate },
+                    { "ApiResponsePreview", body },
+                    { "ErrorMessage", jsonEx.Message }
+                });
+                    }
+                }
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error finding hotels");
-                return PartialView("_Error", "Unable to find hotels. Please try again.");
+                return PartialView("_Error", $"Unable to find hotels: {ex.Message}");
             }
+        }
+
+        // Helper method to safely get string properties from JsonElement
+        private string GetStringProperty(JsonElement element, string propertyPath, string defaultValue = "")
+        {
+            string[] parts = propertyPath.Split('.');
+            JsonElement current = element;
+
+            foreach (var part in parts)
+            {
+                if (!current.TryGetProperty(part, out current))
+                    return defaultValue;
+            }
+
+            return current.ValueKind == JsonValueKind.String ? current.GetString() : defaultValue;
+        }
+
+        // Helper method to get price as a string regardless of format
+        private string GetPriceString(JsonElement hotelElement)
+        {
+            if (hotelElement.TryGetProperty("price_breakdown", out var priceBreakdown))
+            {
+                if (priceBreakdown.TryGetProperty("gross_price", out var grossPrice))
+                {
+                    switch (grossPrice.ValueKind)
+                    {
+                        case JsonValueKind.String:
+                            return grossPrice.GetString();
+                        case JsonValueKind.Number:
+                            return grossPrice.GetDecimal().ToString("0.00");
+                        default:
+                            break;
+                    }
+                }
+
+                // Alternative price properties
+                if (priceBreakdown.TryGetProperty("all_inclusive_price", out var allInclusivePrice))
+                {
+                    return allInclusivePrice.GetDecimal().ToString("0.00");
+                }
+            }
+
+            return "0.00";
         }
 
         private List<BookingVM> MapBookingsToViewModel(IEnumerable<Booking> bookings)

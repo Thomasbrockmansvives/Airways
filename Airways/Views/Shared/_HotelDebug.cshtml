@@ -1,0 +1,28 @@
+﻿@model Dictionary<string, string>
+
+<div class="card">
+    <div class="card-header bg-warning text-dark">
+        <h5>API Debug Information</h5>
+    </div>
+    <div class="card-body">
+        <div class="mb-3">
+            <strong>City:</strong> @Model["City"]
+        </div>
+        <div class="mb-3">
+            <strong>Check-in Date:</strong> @Model["CheckinDate"]
+        </div>
+        <div class="mb-3">
+            <strong>Check-out Date:</strong> @Model["CheckoutDate"]
+        </div>
+
+        @if (Model.ContainsKey("ErrorMessage"))
+        {
+            <div class="alert alert-danger">
+                <strong>Error:</strong> @Model["ErrorMessage"]
+            </div>
+        }
+
+        <h6 class="mt-4">API Response Preview:</h6>
+        <pre class="bg-light p-3" style="max-height: 400px; overflow: auto;">@Model["ApiResponsePreview"]</pre>
+    </div>
+</div>
