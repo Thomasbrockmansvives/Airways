@@ -177,8 +177,7 @@ namespace Airways.Controllers
                     var body = await response.Content.ReadAsStringAsync();
 
                     // Manual extraction approach to bypass the deserialization issues
-                    try
-                    {
+                    
                         // Use JsonDocument for low-level access to the JSON
                         using (JsonDocument doc = JsonDocument.Parse(body))
                         {
@@ -246,20 +245,7 @@ namespace Airways.Controllers
 
                             return PartialView("_HotelResults", viewModel);
                         }
-                    }
-                    catch (Exception jsonEx)
-                    {
-                        
-                        // Return the debug view with more context
-                        return PartialView("~/Views/Shared/_HotelDebug", new Dictionary<string, string>
-                {
-                    { "City", city },
-                    { "CheckinDate", checkinDate },
-                    { "CheckoutDate", checkoutDate },
-                    { "ApiResponsePreview", body },
-                    { "ErrorMessage", jsonEx.Message }
-                });
-                    }
+                    
                 }
             }
             catch (Exception ex)
