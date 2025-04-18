@@ -12,21 +12,18 @@ namespace Airways.WebUI.Controllers
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ICustomerProfileService _customerProfileService;
-        private readonly ILogger<AccountController> _logger;
         private readonly IEmailSend _emailSend;
 
         public AccountController(
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
             ICustomerProfileService customerProfileService,
-            ILogger<AccountController> logger,
             IEmailSend emailSend)
             
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _customerProfileService = customerProfileService;
-            _logger = logger;
             _emailSend = emailSend;
         }
 
@@ -54,9 +51,7 @@ namespace Airways.WebUI.Controllers
 
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User created a new account with password.");
-
-                    
+                                        
                     await _customerProfileService.RegisterNewCustomerProfileAsync(
                         user.Id,
                         model.FirstName,
@@ -66,8 +61,6 @@ namespace Airways.WebUI.Controllers
 
                     
                     await _signInManager.SignInAsync(user, isPersistent: false);
-
-                    _logger.LogInformation("User logged in.");
 
                     
                     return LocalRedirect(returnUrl ?? Url.Content("~/"));
@@ -107,13 +100,11 @@ namespace Airways.WebUI.Controllers
 
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl ?? Url.Content("~/"));
                 }
 
                 if (result.IsLockedOut)
                 {
-                    _logger.LogWarning("User account locked out.");
                     return RedirectToAction(nameof(Lockout));
                 }
                 else
@@ -132,8 +123,7 @@ namespace Airways.WebUI.Controllers
         public async Task<IActionResult> Logout(string returnUrl = null)
         {
             await _signInManager.SignOutAsync();
-            _logger.LogInformation("User logged out.");
-
+            
             if (returnUrl != null)
             {
                 return LocalRedirect(returnUrl);

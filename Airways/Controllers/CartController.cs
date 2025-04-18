@@ -11,7 +11,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 
 /*
- * this controller is (together with the searchController) my most difficult piece.
+ * this controller is (together with the searchController and bookingController) my most difficult piece.
  * because i have been struggling a lot with it and used the help of chatgpt/copilot,
  * i use some commenting for myself to understand the code better
  * especially for the use of tempdata and jsonserialiser
@@ -22,7 +22,7 @@ using System.Threading.Tasks;
 
 namespace Airways.Controllers
 {
-    [Authorize] // ensuring the user is logged in
+    [Authorize]
     public class CartController : Controller
     {
         private readonly IBookingService _bookingService;

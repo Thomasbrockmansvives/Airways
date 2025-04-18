@@ -14,6 +14,14 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using System.Text.Json;
 
+/*
+ * this controller is (together with the searchController and cartcontroller) my most difficult piece.
+ * because i have been struggling a lot with it and used the help of chatgpt/copilot,
+ * i use some commenting for myself to understand the code better
+ * especially for the use of tempdata and jsonserialiser
+ * Api knowledge
+ */
+
 namespace Airways.Controllers
 {
     [Authorize] // Ensures only logged-in users can access
@@ -23,7 +31,6 @@ namespace Airways.Controllers
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ICustomerProfileService _customerProfileService;
         private readonly ICityService _cityService;
-        private readonly ILogger<BookingsController> _logger;
         private readonly BookingApiSettings _apiSettings;
 
 
@@ -32,14 +39,12 @@ namespace Airways.Controllers
             UserManager<IdentityUser> userManager,
             ICustomerProfileService customerProfileService,
             ICityService cityService,
-            ILogger<BookingsController> logger,
             BookingApiSettings apiSettings)
         {
             _bookingService = bookingService;
             _userManager = userManager;
             _customerProfileService = customerProfileService;
             _cityService = cityService;
-            _logger = logger;
             _apiSettings = apiSettings;
         }
 
@@ -50,28 +55,19 @@ namespace Airways.Controllers
                 var user = await _userManager.GetUserAsync(User);
                 if (user == null)
                 {
-                    _logger.LogWarning("User not found when accessing bookings");
                     return RedirectToAction("Login", "Account");
                 }
 
-                _logger.LogInformation($"Found user with ID: {user.Id}");
-
+                
                 var profile = await _customerProfileService.GetCustomerProfileByUserIdAsync(user.Id);
                 if (profile == null)
                 {
-                    _logger.LogWarning($"Customer profile not found for user ID: {user.Id}");
                     return RedirectToAction("Index", "Home");
                 }
 
-                _logger.LogInformation($"Found profile with ID: {profile.ProfileId}");
-
+                
                 var bookings = await _bookingService.GetBookingsByCustomerIdAsync(profile.ProfileId);
-                _logger.LogInformation($"Found {bookings.Count()} bookings for profile {profile.ProfileId}");
-
-                if (!bookings.Any())
-                {
-                    _logger.LogInformation("No bookings found for user");
-                }
+                
 
                 var bookingViewModels = MapBookingsToViewModel(bookings);
                 ViewData["ProfileId"] = profile.ProfileId;
@@ -80,7 +76,6 @@ namespace Airways.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error retrieving bookings");
                 ViewBag.ErrorMessage = ex.ToString();
                 return View(new List<BookingVM>());
             }
@@ -251,8 +246,7 @@ namespace Airways.Controllers
                     }
                     catch (Exception jsonEx)
                     {
-                        _logger.LogError(jsonEx, "Error processing JSON");
-
+                        
                         // Return the debug view with more context
                         return PartialView("~/Views/Shared/_HotelDebug", new Dictionary<string, string>
                 {
@@ -267,7 +261,6 @@ namespace Airways.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error finding hotels");
                 return PartialView("_Error", $"Unable to find hotels: {ex.Message}");
             }
         }
@@ -329,8 +322,7 @@ namespace Airways.Controllers
 
             foreach (var booking in bookings)
             {
-                try
-                {
+                
                     // Determine booking status based on seat number and date
                     string status;
                     bool canCancel = false;
@@ -397,12 +389,7 @@ namespace Airways.Controllers
                         DepartureTime = booking.Flight.FlightNumberNavigation.DepartureTime,
                         ArrivalTime = booking.Flight.FlightNumberNavigation.ArrivalTime
                     });
-                }
-                catch (Exception ex)
-                {
-                    // Log any errors but continue processing other bookings
-                    _logger.LogError(ex, $"Error mapping booking {booking.BookingId}");
-                }
+                
             }
 
             // Sort bookings by flight date and then by departure time
