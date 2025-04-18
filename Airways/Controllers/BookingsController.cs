@@ -156,7 +156,7 @@ namespace Airways.Controllers
 
                 // Calculate checkout date (3 days after check-in)
                 var checkinDate = flightDate.ToString("yyyy-MM-dd");
-                var checkoutDate = flightDate.AddDays(3).ToString("yyyy-MM-dd"); // Changed to 3 days
+                var checkoutDate = flightDate.AddDays(3).ToString("yyyy-MM-dd");
 
                 // Call booking.com API
                 var client = new HttpClient();
@@ -176,19 +176,12 @@ namespace Airways.Controllers
                     response.EnsureSuccessStatusCode();
                     var body = await response.Content.ReadAsStringAsync();
 
-                    // Manual extraction approach to bypass the deserialization issues
-                    
-                        // Use JsonDocument for low-level access to the JSON
+                        // Use JsonDocument to get to the json
                         using (JsonDocument doc = JsonDocument.Parse(body))
                         {
                             var root = doc.RootElement;
 
-                            // Get the total hotels count
-                            int totalHotels = 0;
-                            if (root.TryGetProperty("primary_count", out var countElement))
-                            {
-                                totalHotels = countElement.GetInt32();
-                            }
+                            
 
                             // Get the results array
                             if (!root.TryGetProperty("result", out var resultsElement) || resultsElement.ValueKind != JsonValueKind.Array)
@@ -204,7 +197,7 @@ namespace Airways.Controllers
                             {
                                 if (count >= 3) break;
 
-                                // Try hotel_name_trans first, fall back to hotel_name if needed
+                                // Try hotel_name_trans first, otherwise hotel_name 
                                 string hotelName = GetStringProperty(hotelElement, "hotel_name_trans");
                                 if (string.IsNullOrEmpty(hotelName))
                                 {
@@ -216,7 +209,7 @@ namespace Airways.Controllers
                                     HotelName = hotelName,
                                     ReviewScoreWord = GetStringProperty(hotelElement, "review_score_word"),
                                     MainPhotoUrl = GetStringProperty(hotelElement, "main_photo_url"),
-                                    // Try to get max_photo_url for higher quality images
+                                    // Try to get max_photo_url for better quality image
                                     MaxPhotoUrl = GetStringProperty(hotelElement, "max_photo_url"),
                                     Url = GetStringProperty(hotelElement, "url"),
                                     PriceBreakdown = new PriceBreakdown
@@ -238,7 +231,6 @@ namespace Airways.Controllers
                                 City = city,
                                 CheckinDate = checkinDate,
                                 CheckoutDate = checkoutDate,
-                                TotalHotels = totalHotels,
                                 Hotels = hotelsList,
                                 CurrencySymbol = currencySymbol
                             };
@@ -254,7 +246,7 @@ namespace Airways.Controllers
             }
         }
 
-        // Helper method to safely get string properties from JsonElement
+        // method to get string properties from JsonElement
         private string GetStringProperty(JsonElement element, string propertyPath, string defaultValue = "")
         {
             string[] parts = propertyPath.Split('.');
@@ -269,7 +261,7 @@ namespace Airways.Controllers
             return current.ValueKind == JsonValueKind.String ? current.GetString() : defaultValue;
         }
 
-        // Helper method to get price as a string regardless of format
+        // method to get price as a string
         private string GetPriceString(JsonElement hotelElement)
         {
             if (hotelElement.TryGetProperty("price_breakdown", out var priceBreakdown))
@@ -287,7 +279,7 @@ namespace Airways.Controllers
                     }
                 }
 
-                // Alternative price properties
+                // if price not found
                 if (priceBreakdown.TryGetProperty("all_inclusive_price", out var allInclusivePrice))
                 {
                     return allInclusivePrice.GetDecimal().ToString("0.00");
@@ -327,7 +319,7 @@ namespace Airways.Controllers
                     }
                     else if (booking.Flight.Date == today)
                     {
-                        // Further refine status based on time of day if needed
+                        // Further check status based on time of day 
                         TimeOnly currentTime = TimeOnly.FromDateTime(now);
                         TimeOnly departureTime = booking.Flight.FlightNumberNavigation.DepartureTime;
 
@@ -388,13 +380,13 @@ namespace Airways.Controllers
                 .ToList();
         }
 
-        // Add this method to the BookingsController class
+        
         private string GetCurrencySymbolForCity(string city)
         {
-            // Default to Euro
+            
             string currencySymbol = "€";
 
-            // Map cities to their currency symbols
+            
             switch (city.ToLower())
             {
                 case "new york":

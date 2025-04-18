@@ -55,7 +55,7 @@ namespace Airways.Controllers
         {
             var cartVM = new CartVM(); 
 
-            if (TempData["SimpleCart"] != null) // is there data in TempData
+            if (TempData["SimpleCart"] != null) // is there data in TempData?
             {
                 try
                 {

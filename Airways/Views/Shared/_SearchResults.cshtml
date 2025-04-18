@@ -25,7 +25,7 @@
                 <div class="table-responsive">
                     <table class="table table-hover">
                         <thead>
-                            <tr><!-- header of table -->
+                            <tr>
                                 <th>Date</th>
                                 <th>From</th>
                                 <th>To</th>
@@ -71,7 +71,7 @@
                     <table class="table table-hover">
                         <thead>
                     <tr>
-                        <!-- header of table -->
+                        
                                 <th>Date</th>
                                 <th>From</th>
                                 <th>To</th>
@@ -116,7 +116,7 @@
                     <table class="table table-hover">
                         <thead>
                     <tr>
-                        <!-- header of table -->
+                        
                                 <th>Date</th>
                                 <th>From</th>
                                 <th>To</th>
@@ -138,7 +138,7 @@
                                         <td>@Model.Line3Flight.PriceEconomy.ToString("C")</td>
                                         <td>@Model.Line3Flight.PriceBusiness.ToString("C")</td>
                                         <td>
-                                        <td> <!-- button that calls javascript (in search.cshtml) and uses action with parameters -->
+                                        <td> 
                             <a href="javascript:void(0)"
                                onclick="customizeFlight(@Model.Line3Flight.FlightId, '@Model.Line3Flight.Date.ToString("yyyy-MM-dd")', '@Model.Line3Flight.PriceEconomy.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)', '@Model.Line3Flight.PriceBusiness.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture)', @Model.Line3Flight.FlightNumber)"
                                class="btn btn-sm btn-outline-dark">
