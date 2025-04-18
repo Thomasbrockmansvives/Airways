@@ -231,6 +231,8 @@ namespace Airways.Controllers
                                 count++;
                             }
 
+                            string currencySymbol = GetCurrencySymbolForCity(city);
+
                             // Create view model
                             var viewModel = new HotelsVM
                             {
@@ -238,7 +240,8 @@ namespace Airways.Controllers
                                 CheckinDate = checkinDate,
                                 CheckoutDate = checkoutDate,
                                 TotalHotels = totalHotels,
-                                Hotels = hotelsList
+                                Hotels = hotelsList,
+                                CurrencySymbol = currencySymbol
                             };
 
                             return PartialView("_HotelResults", viewModel);
@@ -397,6 +400,44 @@ namespace Airways.Controllers
                 .OrderBy(b => b.FlightDate)
                 .ThenBy(b => b.DepartureTime)
                 .ToList();
+        }
+
+        // Add this method to the BookingsController class
+        private string GetCurrencySymbolForCity(string city)
+        {
+            // Default to Euro
+            string currencySymbol = "€";
+
+            // Map cities to their currency symbols
+            switch (city.ToLower())
+            {
+                case "new york":
+                    currencySymbol = "USD";
+                    break;
+                case "london":
+                    currencySymbol = "GBP";
+                    break;
+                case "tokyo":
+                    currencySymbol = "JPY";
+                    break;
+                case "dubai":
+                    currencySymbol = "AED";
+                    break;
+                case "singapore":
+                    currencySymbol = "SGD";
+                    break;
+                case "sydney":
+                    currencySymbol = "AUD";
+                    break;
+                case "cape town":
+                    currencySymbol = "ZAR";
+                    break;
+                default:
+                    currencySymbol = "EUR";
+                    break;
+            }
+
+            return currencySymbol;
         }
     }
 }

@@ -11,5 +11,7 @@ namespace Airways.ViewModels
         public string CheckoutDate { get; set; }
         public int TotalHotels { get; set; }
         public List<HotelResult> Hotels { get; set; }
+
+        public string CurrencySymbol { get; set; }
     }
 }

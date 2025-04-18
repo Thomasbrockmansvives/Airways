@@ -44,7 +44,7 @@
                             }
 
                             <p class="card-text mb-2">
-                                <strong>€@hotel.PriceBreakdown.PriceString</strong> <small class="text-muted">per night</small>
+                                <strong>@Model.CurrencySymbol @hotel.PriceBreakdown.PriceString</strong> <small class="text-muted">per night</small>
                             </p>
 
                             @if (!string.IsNullOrEmpty(hotel.Url))
