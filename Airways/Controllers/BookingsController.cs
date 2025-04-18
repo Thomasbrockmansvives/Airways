@@ -1,5 +1,6 @@
 ﻿using Airways.Domain.EntitiesDB;
 using Airways.Models.API;
+using Airways.Util.Api;
 using Airways.Services.Interfaces;
 using Airways.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -23,6 +24,7 @@ namespace Airways.Controllers
         private readonly ICustomerProfileService _customerProfileService;
         private readonly ICityService _cityService;
         private readonly ILogger<BookingsController> _logger;
+        private readonly BookingApiSettings _apiSettings;
 
 
         public BookingsController(
@@ -30,13 +32,15 @@ namespace Airways.Controllers
             UserManager<IdentityUser> userManager,
             ICustomerProfileService customerProfileService,
             ICityService cityService,
-            ILogger<BookingsController> logger)
+            ILogger<BookingsController> logger,
+            BookingApiSettings apiSettings)
         {
             _bookingService = bookingService;
             _userManager = userManager;
             _customerProfileService = customerProfileService;
             _cityService = cityService;
             _logger = logger;
+            _apiSettings = apiSettings;
         }
 
         public async Task<IActionResult> Index()
@@ -167,8 +171,8 @@ namespace Airways.Controllers
                     RequestUri = new Uri($"https://booking-com.p.rapidapi.com/v1/hotels/search?filter_by_currency=EUR&checkout_date={checkoutDate}&checkin_date={checkinDate}&adults_number=1&units=metric&dest_id={formattedDestId}&locale=en-gb&dest_type=city&order_by=popularity&room_number=1"),
                     Headers =
             {
-                { "x-rapidapi-key", "2baa7d1a53mshc3264084c2ffcddp1d61bcjsnc5319bcb3612" },
-                { "x-rapidapi-host", "booking-com.p.rapidapi.com" },
+                { "x-rapidapi-key", _apiSettings.ApiKey },
+                { "x-rapidapi-host", _apiSettings.ApiHost },
             },
                 };
 

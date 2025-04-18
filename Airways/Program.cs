@@ -47,6 +47,10 @@ builder.Services.AddSingleton(emailSettings);
 
 builder.Services.AddSingleton<Airways.Util.Mail.Interfaces.IEmailSend, Airways.Util.Mail.EmailSend>();
 
+// ApiSettings
+var bookingApiSettings = new Airways.Util.Api.BookingApiSettings();
+builder.Configuration.GetSection("BookingApiSettings").Bind(bookingApiSettings);
+builder.Services.AddSingleton(bookingApiSettings);
 
 // DbContext
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
