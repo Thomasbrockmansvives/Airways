@@ -10,15 +10,6 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-/*
- * this controller is (together with the searchController and bookingController) my most difficult piece.
- * because i have been struggling a lot with it and used the help of chatgpt/copilot,
- * i use some commenting for myself to understand the code better
- * especially for the use of tempdata and jsonserialiser
- * TempData: temporary storage mechanism which keeps data for one subsequent request
- * versus ViewBag: only lasts for current request, does not survive redirects
- * Json Serialiser, converting between json string and objects
- */
 
 namespace Airways.Controllers
 {

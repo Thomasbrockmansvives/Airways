@@ -14,13 +14,6 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using System.Text.Json;
 
-/*
- * this controller is (together with the searchController and cartcontroller) my most difficult piece.
- * because i have been struggling a lot with it and used the help of chatgpt/copilot,
- * i use some commenting for myself to understand the code better
- * especially for the use of tempdata and jsonserialiser
- * Api knowledge
- */
 
 namespace Airways.Controllers
 {

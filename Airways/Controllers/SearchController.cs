@@ -8,12 +8,6 @@ using System.Text.Json;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
 
-/*
- * this controller is (together with the cartController and bookingController) my most difficult piece.
- * because i have been struggling a lot with it and used the help of chatgpt/copilot,
- * i use some commenting for myself to understand the code better
- * especially for the use of tempdata and jsonserialiser and invariant culture
- */
 
 [Authorize] // user must be logged in
 public class SearchController : Controller
