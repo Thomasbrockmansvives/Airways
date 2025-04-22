@@ -9,7 +9,6 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 
 
 
-[Authorize] // user must be logged in
 public class SearchController : Controller
 {
     private readonly ICityService _cityService;
@@ -30,8 +29,7 @@ public class SearchController : Controller
     }
 
     
-    [AllowAnonymous] // can of course be accessed when not logged in
-    public IActionResult AccessDenied()
+        public IActionResult AccessDenied()
     {
         return View();
     }

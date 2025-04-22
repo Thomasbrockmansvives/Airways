@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Airways.Controllers
 {
-    [Authorize]
+    
     public class CartController : Controller
     {
         private readonly IBookingService _bookingService;
@@ -130,6 +130,7 @@ namespace Airways.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> ConfirmBooking()
         {
